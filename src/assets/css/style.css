@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "filson-soft", sans-serif;
+
+  --color-*: initial;
+  --color-white: #fff;
+  --color-black: #000;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --color-turquoise: #34a6a2;
+  --color-turquoise-dark: #308b90;
+  --color-purple: #211d47;
+  --color-red: #e52020;
+  --color-green: var(--color-turquoise);
+  --color-gray-50: #f9f9f9;
+  --color-gray-100: #dbdce2;
+  --color-gray-200: #6e7c8f;
+}
+
+@layer base {
+  body {
+    @apply bg-gray-100/20 text-purple;
+  }
+}
+
+@layer utilities {
+  .animate-shake {
+    animation: shake 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  }
+}
+
+@layer components {
+  .input {
+    @apply border-2 border-purple py-5 px-7 rounded-full;
+    &.error {
+      @apply border-red outline-3 outline-red/40;
+    }
+    &.success {
+      @apply border-green outline-3 outline-green/40;
+    }
+  }
+  .input-error {
+    @apply text-red text-sm mt-1;
+  }
+  .rich-text {
+    @apply font-light;
+    blockquote {
+      @apply bg-purple text-white p-5 rounded-md;
+    }
+    b,
+    strong {
+      @apply font-medium;
+    }
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
