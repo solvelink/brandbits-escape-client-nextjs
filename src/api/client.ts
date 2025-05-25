@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const client = axios.create({
-  baseURL: "https://api.brandbits-escape.solve.link/",
+  baseURL: import.meta.env.VITE_API_BASE,
   headers: {
     "Accept-Language": "nl",
   },

@@ -1,12 +1,10 @@
 import { create } from "zustand";
-import { getEscape, getPages } from "../api/routes";
+import { getGame } from "../api/routes";
 
-type Escape = any; // Replace with your actual Escape type
-type Page = any; // Replace with your actual Page type
+type Game = any; // Replace with your actual Escape type
 
 interface EscapeStoreState {
-  escape: Escape | null;
-  pages: Page[];
+  game: Game | null;
   loading: boolean;
   error: string | null;
   currentPage: number;
@@ -15,17 +13,15 @@ interface EscapeStoreState {
 }
 
 const useEscapeStore = create<EscapeStoreState>((set) => ({
-  escape: null,
-  pages: [],
+  game: null,
   loading: false,
   error: null,
   currentPage: 0,
   fetchEscapeAndPages: async () => {
     set({ loading: true, error: null });
     try {
-      const escape = await getEscape(1);
-      const pages = await getPages(1);
-      set({ escape: escape.data, pages: pages.data, loading: false });
+      const game = await getGame(window.location.hostname);
+      set({ game: game.data, loading: false });
     } catch (error: any) {
       set({ error: error.message || "Failed to fetch", loading: false });
     }

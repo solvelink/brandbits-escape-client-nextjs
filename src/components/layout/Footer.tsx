@@ -9,7 +9,7 @@ export const Footer = () => {
   const navigate = useNavigate();
 
   const nextPage = () => {
-    if (escapeStore.currentPage < escapeStore.pages.length - 1) {
+    if (escapeStore.currentPage < escapeStore.game?.pages.length - 1) {
       escapeStore.setCurrentPage(escapeStore.currentPage + 1);
       navigate(`/game/${escapeStore.currentPage + 2}`);
     } else {
@@ -26,8 +26,9 @@ export const Footer = () => {
     }
   };
 
-  const hasHints =
-    escapeStore.pages[escapeStore.currentPage]?.data[0].hints?.length > 0;
+  const currentPage = escapeStore.game?.pages[escapeStore.currentPage]?.data[0];
+  const hasHints = currentPage?.hints?.length > 0;
+  const buttonLabel = currentPage?.buttonLabel || "Ga verder";
 
   return (
     <>
@@ -41,14 +42,16 @@ export const Footer = () => {
           </div>
         ) : (
           <div className="flex gap-4">
-            <CircleButton onClick={previousPage}>
+            <CircleButton onClick={previousPage} className="shrink-0">
               <ArrowLeftIcon className="w-5 fill-current" />
             </CircleButton>
-            <Button disabled={hasHints} className="flex-1" color="purple">
-              Hint
-            </Button>
+            {hasHints && (
+              <Button className="flex-1" color="purple">
+                Hint
+              </Button>
+            )}
             <Button onClick={nextPage} className="flex-2">
-              Ga Verder
+              {buttonLabel}
             </Button>
           </div>
         )}

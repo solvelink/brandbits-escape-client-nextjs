@@ -1,8 +1,6 @@
-import { Footer } from "@/components/layout/Footer";
 import { Header, HeaderBar } from "@/components/layout/Header";
 import { Map } from "@/components/game/Map";
 import MapPinIcon from "@/assets/icons/map-pin.svg?react";
-import { useConfig } from "@/config";
 import { Collapsable } from "@/components/Collapsable";
 import { Markdown } from "@/components/Markdown";
 import { isAppleDevice } from "@/utils/isApple";
@@ -76,6 +74,16 @@ export default function DefaultPage({ page }: { page: any }) {
         )}
         {page.questionType !== "none" && `Question type: ${page.questionType}`}
         {page.textField3 && <Markdown>{page.textField3}</Markdown>}
+        {page.hints && page.hints.length > 0 && (
+          <div className="flex flex-col gap-2">
+            {page.hints.map((hint: any, index: number) => (
+              <div className="bg-gray-75 rounded-md p-5" key={hint.id}>
+                <h1 className="font-bold">Hint {index + 1}</h1>
+                <p>{hint.text}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       {/* <DragDropProvider
         onDragEnd={(event) => {

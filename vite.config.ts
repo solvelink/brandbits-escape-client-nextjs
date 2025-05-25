@@ -3,12 +3,11 @@ import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
-import config from "./config.json";
 
 // https://vite.dev/config/
 export default defineConfig({
   server: {
-    allowedHosts: Object.keys(config),
+    allowedHosts: [".escape.test", ".ontdekmoerdijk.nl"],
     host: true,
     port: 3000,
   },

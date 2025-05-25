@@ -15,6 +15,7 @@
   --color-red: #e52020;
   --color-green: var(--color-turquoise);
   --color-gray-50: #f9f9f9;
+  --color-gray-75: #f2f1f4;
   --color-gray-100: #dbdce2;
   --color-gray-200: #6e7c8f;
 }

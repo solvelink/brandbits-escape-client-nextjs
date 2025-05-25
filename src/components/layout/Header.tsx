@@ -53,8 +53,8 @@ export const Header = () => {
   const [showMapDialog, setShowMapDialog] = useState(false);
 
   const progress =
-    escapeStore.pages.length > 0
-      ? (escapeStore.currentPage / escapeStore.pages.length) * 100
+    escapeStore.game.pages.length > 0
+      ? (escapeStore.currentPage / escapeStore.game.pages.length) * 100
       : 0;
 
   return (
@@ -63,7 +63,7 @@ export const Header = () => {
       <HeaderBar className="h-32">
         <div className="px-2 py-3">
           <div className="flex justify-between items-center">
-            <p className="text-xl font-medium leading-5">Tom</p>
+            <p className="text-xl font-medium leading-5">Team</p>
             <div className="ml-auto flex gap-3">
               <div className="text-xl font-medium bg-turquoise-dark h-14 px-6 rounded-full flex items-center justify-center">
                 200

@@ -10,8 +10,8 @@ import { Footer } from "@/components/layout/Footer";
 export default function Page() {
   const escapeStore = useEscapeStore();
   const params = useParams();
-  // get slug
-  const page = escapeStore.pages[Number(params.page) - 1];
+
+  const page = escapeStore.game?.pages[Number(params.page) - 1];
   useEffect(() => {
     escapeStore.setCurrentPage(Number(params.page) - 1);
   }, [params.page]);
