@@ -6,6 +6,7 @@ import {
   ListboxButton,
   ListboxOption,
   ListboxOptions,
+  Transition,
 } from "@headlessui/react";
 import { clsx } from "clsx";
 import NLIcon from "@/assets/icons/flags/nl.svg?react";
@@ -14,20 +15,13 @@ import DEIcon from "@/assets/icons/flags/de.svg?react";
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg?react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { nl } from "yup-locales";
-yup.setLocale(nl);
-
-const schema = yup
-  .object({
-    name: yup.string().required().label("Naam"),
-    email: yup.string().email().required().label("E-mail"),
-    street: yup.string().required().label("Straat en huisnummer"),
-    postalCode: yup.string().required().label("Postcode"),
-    city: yup.string().required().label("Plaats"),
-    language: yup.string().required().label("Taal"),
-  })
-  .required();
+import { yup } from "@/utils/validation";
+import { useLanguage } from "@/hooks/langauge";
+import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { createOrder } from "@/api/routes";
+import useEscapeStore from "@/stores/escapeStore";
+import useCheckoutStore from "@/stores/checkoutStore";
 
 const languages = [
   { label: "Nederlands", value: "nl", icon: NLIcon },
@@ -36,6 +30,24 @@ const languages = [
 ];
 
 export const CheckoutForm = () => {
+  const { language, navigate } = useLanguage();
+  const escape = useEscapeStore((state) => state.escape);
+  const checkoutStore = useCheckoutStore();
+  const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const schema = yup
+    .object({
+      name: yup.string().required().label(t("checkout.form.name")),
+      email: yup.string().email().required().label(t("checkout.form.email")),
+      address: yup.string().required().label(t("checkout.form.address")),
+      zipcode: yup.string().required().label(t("checkout.form.postal_code")),
+      city: yup.string().required().label(t("checkout.form.city")),
+      language: yup.string().required().label(t("checkout.form.language")),
+    })
+    .required();
+
   const {
     register,
     handleSubmit,
@@ -45,38 +57,77 @@ export const CheckoutForm = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      language: "nl",
+      language,
     },
   });
 
-  const onSubmit = handleSubmit((data) => console.log(data));
   const languageValue = watch("language");
   const selectedLanguage = languages.find(
     (language) => language.value === languageValue
   )!;
 
+  const onSubmit = handleSubmit(async (data) => {
+    if (isLoading) return;
+    try {
+      setIsLoading(true);
+      setErrorMessage(null);
+      const res = await createOrder(escape!.id, {
+        productType: checkoutStore.type,
+        quantity: checkoutStore.quantity,
+        contactData: {
+          name: data.name,
+          email: data.email,
+          address: data.address,
+          zipcode: data.zipcode,
+          city: data.city,
+        },
+        language: data.language,
+        discountCode: checkoutStore.discountCode,
+      });
+      checkoutStore.clear();
+      if (res.data.status === "redirect") {
+        window.location.href = res.data.redirectUrl;
+      } else if (res.data.status === "success") {
+        navigate("success");
+      } else {
+        throw new Error("unknown response status from server");
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+      setErrorMessage(t("checkout.form.error"));
+    } finally {
+      setIsLoading(false);
+    }
+  });
+
   return (
     <div>
+      <Transition show={!!errorMessage}>
+        <p className="text-red text-center py-2 px-4 mb-4 border-2 border-red bg-red/5 rounded-full transition duration-300 ease-in data-closed:opacity-0">
+          {errorMessage}
+        </p>
+      </Transition>
       <form
+        id="checkout-form"
         className="flex flex-col gap-3"
         onSubmit={onSubmit}
         autoComplete="on"
       >
         <Field>
-          <Label className="hidden">Naam</Label>
+          <Label className="sr-only">{t("checkout.form.name")}</Label>
           <Input
             className={clsx("input w-full", { error: errors.name })}
-            placeholder="Naam"
+            placeholder={t("checkout.form.name")}
             autoComplete="name"
             {...register("name")}
           />
           <p className="input-error">{errors.name?.message}</p>
         </Field>
         <Field>
-          <Label className="hidden">E-mail</Label>
+          <Label className="sr-only">{t("checkout.form.email")}</Label>
           <Input
             className={clsx("input w-full", { error: errors.email })}
-            placeholder="E-mail"
+            placeholder={t("checkout.form.email")}
             autoComplete="email"
             type="email"
             {...register("email")}
@@ -84,31 +135,31 @@ export const CheckoutForm = () => {
           <p className="input-error">{errors.email?.message}</p>
         </Field>
         <Field>
-          <Label className="hidden">Straat en huisnummer</Label>
+          <Label className="sr-only">{t("checkout.form.address")}</Label>
           <Input
-            className={clsx("input w-full", { error: errors.street })}
-            placeholder="Straat en huisnummer"
+            className={clsx("input w-full", { error: errors.address })}
+            placeholder={t("checkout.form.address")}
             autoComplete="street-address"
-            {...register("street")}
+            {...register("address")}
           />
-          <p className="input-error">{errors.street?.message}</p>
+          <p className="input-error">{errors.address?.message}</p>
         </Field>
         <div className="grid grid-cols-2 gap-3">
           <Field>
-            <Label className="hidden">Postcode</Label>
+            <Label className="sr-only">{t("checkout.form.postal_code")}</Label>
             <Input
-              className={clsx("input w-full", { error: errors.postalCode })}
-              placeholder="Postcode"
+              className={clsx("input w-full", { error: errors.zipcode })}
+              placeholder={t("checkout.form.postal_code")}
               autoComplete="postal-code"
-              {...register("postalCode")}
+              {...register("zipcode")}
             />
-            <p className="input-error">{errors.postalCode?.message}</p>
+            <p className="input-error">{errors.zipcode?.message}</p>
           </Field>
           <Field>
-            <Label className="hidden">Plaats</Label>
+            <Label className="sr-only">{t("checkout.form.city")}</Label>
             <Input
               className={clsx("input w-full", { error: errors.city })}
-              placeholder="Plaats"
+              placeholder={t("checkout.form.city")}
               autoComplete="address-level2"
               {...register("city")}
             />
@@ -116,9 +167,7 @@ export const CheckoutForm = () => {
           </Field>
         </div>
         <Field>
-          <Label className="font-medium">
-            In welke taal wil je de escape spelen?
-          </Label>
+          <Label className="font-medium">{t("checkout.form.language")}</Label>
           <Controller
             name="language"
             control={control}
@@ -152,9 +201,6 @@ export const CheckoutForm = () => {
             )}
           />
         </Field>
-        <button type="submit" className="btn-green">
-          Volgende stap
-        </button>
       </form>
     </div>
   );

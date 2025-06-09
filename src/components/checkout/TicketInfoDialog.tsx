@@ -6,6 +6,8 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import CrossIcon from "@/assets/icons/cross.svg?react";
+import { useTranslation } from "react-i18next";
+import { Markdown } from "../Markdown";
 
 export const TicketInfoDialog = ({
   open,
@@ -14,6 +16,8 @@ export const TicketInfoDialog = ({
   open: boolean;
   onClose: (value: boolean) => void;
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Dialog
       open={open}
@@ -31,26 +35,15 @@ export const TicketInfoDialog = ({
             transition
             className="bg-white p-6 duration-300 max-w-lg rounded-md ease-out data-closed:transform-[scale(95%)] data-closed:opacity-0 font-light"
           >
-            <div className="flex items-center justify-between border-b border-gray-100 pb-5">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-5 mb-5">
               <DialogTitle as="h3" className="font-medium">
-                Welk ticket heb ik nodig?
+                {t("checkout.help.title")}
               </DialogTitle>
               <button onClick={() => onClose(false)}>
                 <CrossIcon className="fill-current w-6" />
               </button>
             </div>
-            <p className="mt-6">
-              <b>Ik wil met 1 telefoon spelen</b> tempor nisi enim officia
-              proident sit eiusmod sint proident non duis anim officia.
-              Consequat proident occaecat consequat reprehenderit ipsum aute.
-              Incididunt elit qui commodo adipisicing labore sint nulla anim
-            </p>
-            <p className="mt-6">
-              <b>Wij gaan tegen elkaar strijden</b> nisi enim officia proident
-              sit eiusmod sint proident non duis anim officia. Consequat
-              proident occaecat consequat reprehenderit ipsum aute. Incididunt
-              elit qui commodo adipisicing labore sint nulla anim .
-            </p>
+            <Markdown>{t("checkout.help.description")}</Markdown>
           </DialogPanel>
         </div>
       </div>

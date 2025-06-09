@@ -1,32 +1,55 @@
 import { create } from "zustand";
-import { getGame } from "../api/routes";
-
-type Game = any; // Replace with your actual Escape type
+import { getEscape } from "../api/routes";
+import { Escape } from "@/types/escapes";
+import { useLanguage } from "@/hooks/langauge";
+import { LoadingState } from "@/types/enum";
 
 interface EscapeStoreState {
-  game: Game | null;
-  loading: boolean;
-  error: string | null;
-  currentPage: number;
-  fetchEscapeAndPages: () => Promise<void>;
-  setCurrentPage: (page: number) => void;
+  escape: Escape | null;
+  state: LoadingState;
+  errorMessage: string | null;
+  fetchEscape: () => Promise<void>;
 }
 
 const useEscapeStore = create<EscapeStoreState>((set) => ({
-  game: null,
-  loading: false,
-  error: null,
-  currentPage: 0,
-  fetchEscapeAndPages: async () => {
-    set({ loading: true, error: null });
+  escape: null,
+  state: LoadingState.LOADING,
+  errorMessage: null,
+  fetchEscape: async () => {
+    set({ state: LoadingState.LOADING, errorMessage: null });
     try {
-      const game = await getGame(window.location.hostname);
-      set({ game: game.data, loading: false });
-    } catch (error: any) {
-      set({ error: error.message || "Failed to fetch", loading: false });
+      const data = await getEscape(window.location.hostname);
+      set({
+        escape: data.data,
+        state: LoadingState.IDLE,
+        errorMessage: null,
+      });
+    } catch (error) {
+      set({
+        state: LoadingState.ERROR,
+        errorMessage: error instanceof Error ? error.message : "Unknown error",
+      });
     }
   },
-  setCurrentPage: (page: number) => set({ currentPage: page }),
 }));
+
+export const useEscape = () => {
+  const escape = useEscapeStore((state) => state.escape);
+  const { language } = useLanguage();
+  if (!escape) {
+    return undefined;
+  }
+
+  const escapeContent =
+    escape?.escapeContent.find((content) => content.language === language) ||
+    escape?.escapeContent.find((content) => content.language === "nl");
+
+  return {
+    ...escape,
+    priceSingle: Number(escape.priceSingle),
+    priceTeams: Number(escape.priceTeams),
+    escapeContent,
+  };
+};
 
 export default useEscapeStore;

@@ -13,7 +13,7 @@ export const MapDialog = ({
     <Dialog
       open={open}
       as="div"
-      className="relative z-10 focus:outline-none"
+      className="relative z-30 focus:outline-none"
       onClose={onClose}
     >
       <DialogBackdrop

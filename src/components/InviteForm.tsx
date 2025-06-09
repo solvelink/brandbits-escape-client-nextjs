@@ -1,0 +1,79 @@
+import { useEscape } from "@/stores/escapeStore";
+import useGameStore from "@/stores/gameStore";
+import { Field, Input, Label } from "@headlessui/react";
+import clsx from "clsx";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Button } from "./ui/button";
+import { redeemInviteCode } from "@/api/routes";
+import { useLanguage } from "@/hooks/langauge";
+
+export const InviteForm = () => {
+  const gameStore = useGameStore();
+  const escape = useEscape();
+  const { t } = useTranslation();
+  const { navigate } = useLanguage();
+
+  const [code, setCode] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const isValidForm = useMemo(
+    () => /^\d{3} - \d{3}$/.test(code) && !isLoading && escape,
+    [code, isLoading, escape]
+  );
+
+  const submitInviteCode = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!isValidForm) return;
+    try {
+      setIsLoading(true);
+      const numericCode = code.replace(/[^0-9]/g, "");
+      const res = await redeemInviteCode(window.location.hostname, numericCode);
+      gameStore.setGameToken(res.data.gameToken);
+      navigate("game/1");
+    } catch (error) {
+      console.error("Error submitting invite code:", error);
+      setErrorMessage(t("invite.error"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, ""); // Remove non-digits
+    if (value.length > 6) value = value.slice(0, 6);
+    if (value.length > 3) {
+      value = value.slice(0, 3) + " - " + value.slice(3);
+    }
+    setCode(value);
+    if (errorMessage) {
+      setErrorMessage(null);
+    }
+  };
+
+  return (
+    <form className="p-4" onSubmit={submitInviteCode} autoComplete="off">
+      <Field>
+        <Label>{t("invite.label")}</Label>
+        <Input
+          value={code}
+          onChange={handleInputChange}
+          className={clsx("input w-full text-center mt-1", {
+            error: errorMessage,
+          })}
+          placeholder="000 - 000"
+          inputMode="numeric"
+        />
+        {errorMessage && <p className="input-error">{errorMessage}</p>}
+      </Field>
+      <Button
+        className="w-full mt-3"
+        error={!!errorMessage}
+        disabled={!isValidForm}
+        type="submit"
+      >
+        {t("common.continue")}
+      </Button>
+    </form>
+  );
+};

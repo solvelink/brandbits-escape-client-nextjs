@@ -17,10 +17,6 @@ i18n.use(initReactI18next).init({
       translation: deTranslations,
     },
   },
+  lng: "nl",
   fallbackLng: "nl",
 });
-
-export const setLanguage = (lang: "nl" | "en" | "de") => {
-  i18n.changeLanguage(lang);
-  document.documentElement.lang = lang;
-};

@@ -13,12 +13,17 @@ const styles = {
     purple: ["bg-purple text-white"],
     "purple/outline": ["bg-transparent text-purple border border-purple"],
   },
+  error: [
+    "bg-red text-white animate-shake",
+    "data-disabled:bg-red/50 data-disabled:text-white/50",
+  ],
 };
 
 type ButtonProps = {
   color?: keyof typeof styles.colors;
   className?: string;
   disabled?: boolean;
+  error?: boolean;
   children: React.ReactNode;
 } & (
   | Omit<Headless.ButtonProps, "as" | "className" | "disabled">
@@ -28,13 +33,13 @@ type ButtonProps = {
 
 export const Button = forwardRef(
   (
-    { color, className, disabled, children, ...props }: ButtonProps,
+    { color, className, disabled, error, children, ...props }: ButtonProps,
     ref: React.ForwardedRef<HTMLElement>
   ) => {
     const classes = clsx(
       className,
       styles.base,
-      styles.colors[color ?? "turquoise"]
+      error ? styles.error : styles.colors[color ?? "turquoise"]
     );
 
     if ("to" in props) {
@@ -64,7 +69,7 @@ export const Button = forwardRef(
         {...props}
         className={clsx(classes, "cursor-default")}
         ref={ref}
-        data-disabled={disabled}
+        data-disabled={disabled ? "true" : undefined}
         onClick={(e) => {
           if (disabled) {
             e.preventDefault();

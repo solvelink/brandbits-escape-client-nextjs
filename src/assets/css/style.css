@@ -26,25 +26,46 @@
   }
 }
 
-@layer utilities {
-  .animate-shake {
-    animation: shake 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-  }
+@utility animate-shake {
+  animation: shake 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@utility bg-lines-gradient {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--color-gray-50),
+    var(--color-gray-50) 40px,
+    var(--color-gray-75) 40px,
+    var(--color-gray-75) 80px
+  );
 }
 
 @layer components {
   .input {
-    @apply border-2 border-purple py-5 px-7 rounded-full;
+    @apply border-2 border-purple outline-0 outline-transparent py-5 px-7 rounded-full transition-all;
     &.error {
-      @apply border-red outline-3 outline-red/40;
+      @apply text-red border-red outline-3 outline-red/40;
     }
     &.success {
-      @apply border-green outline-3 outline-green/40;
+      @apply text-green border-green outline-3 outline-green/40;
     }
   }
+
+  .radio-item {
+    @apply block font-normal w-full p-5 border-2 border-purple rounded-full text-center relative;
+    &.error {
+      @apply text-red border-red outline-3 outline-red/40;
+    }
+    &.success,
+    &[data-checked] {
+      @apply text-green border-green outline-3 outline-green/40;
+    }
+  }
+
   .input-error {
     @apply text-red text-sm mt-1;
   }
+
   .rich-text {
     @apply font-light;
     blockquote {
@@ -53,6 +74,18 @@
     b,
     strong {
       @apply font-medium;
+    }
+  }
+
+  .tooltip {
+    &:before {
+      content: "";
+      @apply absolute border-t-white border-r-white border-b-transparent border-l-transparent rounded-t-lg border-solid;
+      top: -14px;
+      left: 50%;
+      margin-left: -16px;
+      border-width: 16px;
+      transform: rotate(-45deg);
     }
   }
 }

@@ -1,3 +1,7 @@
 export default function NotFoundPage() {
-  return <div>404</div>;
+  return (
+    <div className="flex justify-center items-center min-h-screen text-xl">
+      404
+    </div>
+  );
 }

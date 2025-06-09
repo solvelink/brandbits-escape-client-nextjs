@@ -1,3 +1,14 @@
 {
-  "welcome": "Welcome to the app"
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "close": "Close",
+    "cancel": "Cancel",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "continue": "Continue",
+    "error": "An error has occurred",
+    "loading": "Loading..."
+  }
 }

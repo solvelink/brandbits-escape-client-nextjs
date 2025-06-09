@@ -1,19 +1,19 @@
-import useGameStore from "@/stores/gameStore";
-import { LoadingSpinner } from "./LoadingSpinner";
-import { Outlet } from "react-router";
-import { LoadingState } from "@/types/enum";
-import { useTranslation } from "react-i18next";
+import useEscapeStore from "@/stores/escapeStore";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { Outlet } from "react-router";
+import { LoadingSpinner } from "./LoadingSpinner";
+import { LoadingState } from "@/types/enum";
 
-export const GameLayout = () => {
-  const gameStore = useGameStore();
+export const CheckoutLayout = () => {
+  const escapeStore = useEscapeStore();
   const { t } = useTranslation();
 
   useEffect(() => {
-    gameStore.fetchGame();
+    escapeStore.fetchEscape();
   }, []);
 
-  if (gameStore.state === LoadingState.LOADING) {
+  if (escapeStore.state === LoadingState.LOADING) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <LoadingSpinner />
@@ -21,7 +21,7 @@ export const GameLayout = () => {
     );
   }
 
-  if (gameStore.state === LoadingState.ERROR) {
+  if (escapeStore.state === LoadingState.ERROR) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="text-red bg-red/10 px-4 py-3 rounded-md">

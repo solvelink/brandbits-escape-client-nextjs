@@ -6,6 +6,7 @@ import {
 } from "@headlessui/react";
 import CrossIcon from "@/assets/icons/cross.svg?react";
 import { Button } from "../ui/button";
+import { useTranslation } from "react-i18next";
 
 export const NavigationPreferenceDialog = ({
   open,
@@ -18,13 +19,15 @@ export const NavigationPreferenceDialog = ({
   appleUrl: string;
   googleUrl: string;
 }) => {
+  const { t } = useTranslation();
+
   const openLink = (type: "apple" | "google") => {
     if (type === "apple") {
       window.open(appleUrl, "_blank");
     } else {
       window.open(googleUrl, "_blank");
     }
-    localStorage.setItem("navigation_preference", type);
+    localStorage.setItem("escape_navigation_preference", type);
     onClose(false);
   };
 
@@ -47,7 +50,7 @@ export const NavigationPreferenceDialog = ({
           >
             <div className="flex items-center justify-between border-b border-gray-100 pb-5">
               <DialogTitle as="h3" className="font-medium">
-                Selecteer je navigatie app
+                {t("pages.navigation.dialog_title")}
               </DialogTitle>
               <button onClick={() => onClose(false)}>
                 <CrossIcon className="fill-current w-6" />

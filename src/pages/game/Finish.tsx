@@ -1,7 +1,14 @@
+import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { HeaderBar } from "@/components/layout/Header";
 import { RankingItem } from "@/components/RankingItem";
 import { Button } from "@/components/ui/button";
+import ArrowLeftIcon from "@/assets/icons/arrow-left.svg?react";
+import { CircleButton } from "@/components/ui/CircleButton";
+import { useGameNavigation } from "@/stores/gameStore";
 import { clsx } from "clsx";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/hooks/langauge";
+import { Map } from "@/components/game/Map";
 
 const Stats = ({
   points,
@@ -43,9 +50,17 @@ const Stats = ({
 };
 
 export default function Finish() {
+  const { t } = useTranslation();
+  const { navigate } = useLanguage();
+  const { previousPage } = useGameNavigation();
+
+  const handleNext = () => {
+    navigate("game/ranking");
+  };
+
   return (
-    <div className="pt-4">
-      <HeaderBar />
+    <div>
+      <HeaderBar sticky />
       <div className="px-4 py-6 bg-gray-50 text-center">
         <h1 className="font-bold text-2xl">Gefeliciteerd!</h1>
         <p className="rich-text mt-4">
@@ -82,10 +97,18 @@ export default function Finish() {
             distance="2,5 km"
           />
         </div>
-        <Button className="wp-full mt-4" to="/game/ranking">
-          Ranking
-        </Button>
+        <div className="bg-gray-50 rounded-md overflow-hidden mt-6 h-64">
+          <Map className="h-full" />
+        </div>
       </div>
+      <BottomNavigation>
+        <CircleButton onClick={() => previousPage(true)} className="shrink-0">
+          <ArrowLeftIcon className="w-5 fill-current" />
+        </CircleButton>
+        <Button onClick={handleNext} className="flex-1">
+          {t("common.next")}
+        </Button>
+      </BottomNavigation>
     </div>
   );
 }

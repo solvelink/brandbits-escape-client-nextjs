@@ -1,3 +1,83 @@
 {
-  "welcome": "Welkom bij de app"
+  "common": {
+    "yes": "Ja",
+    "no": "Nee",
+    "close": "Sluiten",
+    "cancel": "Annuleren",
+    "next": "Ga verder",
+    "previous": "Vorige",
+    "submit": "Versturen",
+    "continue": "Doorgaan",
+    "check": "Check",
+    "remove": "Verwijderen",
+    "error": "Er is een fout opgetreden",
+    "loading": "Laden...",
+    "hint": "Hint",
+    "skip": "Sla over"
+  },
+  "checkout": {
+    "title": "Tickets bestellen",
+    "single_label": "1 ticket kopen",
+    "team_label": "Groep tickets kopen",
+    "free": "Gratis",
+    "invite_button": "Ik heb een uitnodigingscode",
+    "ticket_one": "{{count}}x ticket",
+    "ticket_other": "{{count}}x tickets",
+    "team_quantity": "Aantal teams",
+    "payment_methods": "Betaalmethodes",
+    "vat_included": "Inclusief BTW",
+    "pay_button": "Door naar betalen",
+    "help": {
+      "button": "Hulp bij het juiste ticket kiezen",
+      "title": "Welk ticket heb ik nodig?",
+      "description": "**Ik wil met 1 telefoon spelen** tempor nisi enim officia proident sit eiusmod sint proident non duis anim officia. Consequat proident occaecat consequat reprehenderit ipsum aute. Incididunt elit qui commodo adipisicing labore sint nulla anim\n\n**Wij gaan tegen elkaar strijden** nisi enim officia proident sit eiusmod sint proident non duis anim officia. Consequat proident occaecat consequat reprehenderit ipsum aute. Incididunt elit qui commodo adipisicing labore sint nulla anim."
+    },
+    "form": {
+      "name": "Naam",
+      "email": "E-mail",
+      "address": "Straat en huisnummer",
+      "postal_code": "Postcode",
+      "city": "Plaats",
+      "language": "In welke taal wil je de escape spelen?",
+      "error": "Mislukt om naar betalen te gaan. Probeer het opnieuw."
+    },
+    "discount": {
+      "button": "Voer een kortingscode in",
+      "label": "Kortingscode",
+      "placeholder": "Voer je kortingscode in",
+      "error": "De ingevoerde kortingscode is ongeldig."
+    },
+    "success_title": "Je bestelling is gelukt"
+  },
+  "invite": {
+    "title": "Uitnodigingscode invoeren",
+    "label": "Vul de code uit de mail in",
+    "error": "De ingevoerde code is ongeldig."
+  },
+  "team_name_placeholder": "Teamnaam",
+  "onboarding_description": {
+    "progress": "Hier vind je je **voortgang**, hoe ver je bent met de escape",
+    "points": "Hier zie je de **punten** die je hebt verzameld. Een hint aanvragen kost **10 punten**, per vraag kun je maximaal **30 punten** verdienen. Let op, elk foutief antwoord is **1 punt** in mindering.",
+    "map": "Hier vind je de kaart. Deze **kaart** geeft je informatie en de route",
+    "hint": "Officia qui cillum tempor eu non proident dolore labore eu amet consequat. Enim ea id amet ut sint officia. Excepteur excepteur enim excepteur in ad. Dolor labore occaecat dolore dolor.",
+    "teamname": "Officia qui cillum tempor eu non proident dolore labore eu amet consequat. Enim ea id amet ut sint officia. Excepteur excepteur enim excepteur in ad. Dolor labore occaecat dolore dolor."
+  },
+  "onboarding_teamname": {
+    "title": "Hoera, je bent bijna zover!",
+    "description": "Kies een leuke teamnaam om jouw avontuur in Willemstad te beginnen",
+    "notice": "**Let op:** je teamnaam kan later niet meer worden gewijzigd",
+    "placeholder": "Typ hier je teamnaam",
+    "button": "Dit word hem!"
+  },
+  "pages": {
+    "navigation": {
+      "link": "Gebruik deze link om te navigeren",
+      "dialog_title": "Selecteer je navigatie app"
+    },
+    "answer_placeholder": "Typ hier je antwoord",
+    "photo": {
+      "button": "Maak een foto",
+      "share_label": "Jou foto delen of opslaan via"
+    }
+  }
 }

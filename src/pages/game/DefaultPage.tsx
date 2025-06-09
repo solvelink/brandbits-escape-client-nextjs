@@ -1,43 +1,36 @@
 import { Header, HeaderBar } from "@/components/layout/Header";
-import { Map } from "@/components/game/Map";
 import MapPinIcon from "@/assets/icons/map-pin.svg?react";
 import { Collapsable } from "@/components/Collapsable";
 import { Markdown } from "@/components/Markdown";
 import { isAppleDevice } from "@/utils/isApple";
 import { NavigationPreferenceDialog } from "@/components/game/NavigationPreferenceDialog";
 import { useState } from "react";
+import { GameDefaultPage } from "@/types/game";
+import { BottomNavigation } from "@/components/layout/BottomNavigation";
+import { CircleButton } from "@/components/ui/CircleButton";
+import ArrowLeftIcon from "@/assets/icons/arrow-left.svg?react";
+import useGameStore, {
+  useGameNavigation,
+  useGameProgress,
+} from "@/stores/gameStore";
+import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
+import { DefaultPageHeader } from "@/components/defaultPage/DefaultPageHeader";
+import { OpenQuestion } from "@/components/defaultPage/OpenQuestion";
+import { useAnswer } from "@/stores/answerStore";
+import { MultipleChoiceQuestion } from "@/components/defaultPage/MultipleChoiceQuestion";
 
-const DefaultPageHeader = ({ type, data }: any) => {
-  let height = "";
-  switch (data.headerSize) {
-    case "large":
-      height = "h-80 w-full";
-      break;
-    case "medium":
-      height = "h-64 w-full";
-      break;
-    case "small":
-      height = "h-48 w-full";
-      break;
-    default:
-      height = "h-64 w-full";
-  }
-
-  if (type === "image")
-    return (
-      <img src={data.headerImageUrl} className={height + " object-cover"} />
-    );
-  if (type === "map") return <Map className={height} />;
-  // if (type === "video")
-  return null;
-};
-
-export default function DefaultPage({ page }: { page: any }) {
+export default function DefaultPage({ page }: { page: GameDefaultPage }) {
+  const answerHook = useAnswer();
+  const currentPage = useGameStore((state) => state.currentPage);
+  const gameProgress = useGameProgress();
+  const { t } = useTranslation();
   const [showPreferenceDialog, setShowPreferenceDialog] = useState(false);
+  const { previousPage, nextPage } = useGameNavigation();
 
   const openNavigation = () => {
     if (isAppleDevice()) {
-      const preference = localStorage.getItem("navigation_preference");
+      const preference = localStorage.getItem("escape_navigation_preference");
       if (preference === "apple") {
         window.open(page.appleMapsUrl, "_blank");
       } else if (preference === "google") {
@@ -50,20 +43,35 @@ export default function DefaultPage({ page }: { page: any }) {
     }
   };
 
+  const hasNavigation = page.appleMapsUrl && page.googleMapsUrl;
+
+  const handleHints = () => {
+    const max = page.hints?.length || 0;
+    const newHintCount = Math.min(answerHook.hintCount + 1, max);
+    answerHook.setHintCount(newHintCount);
+  };
+
+  const hints = page.hints?.slice(0, answerHook.hintCount) || [];
+  const maxHintsReached = hints.length >= (page.hints?.length || 0);
+
   return (
-    <div className={page.showProgressHeader ? "" : "pt-4"}>
-      {page.showProgressHeader ? <Header /> : <HeaderBar />}
-      <DefaultPageHeader type={page.headerType} data={page} />
+    <div>
+      {page.showProgressHeader ? (
+        <Header sticky progress={gameProgress} />
+      ) : (
+        <HeaderBar sticky />
+      )}
+      <DefaultPageHeader page={page} />
       <div className="px-4 py-6 flex flex-col gap-4 font-light">
         {page.title && <h1 className="text-2xl font-bold">{page.title}</h1>}
         {page.textField1 && <Markdown>{page.textField1}</Markdown>}
-        {page.appleMapsUrl && page.googleMapsUrl && (
+        {hasNavigation && (
           <button
             onClick={openNavigation}
             className="flex items-center text-turquoise underline"
           >
             <MapPinIcon className="fill-current w-4 mr-1" />
-            Gebruik deze link om te navigeren
+            {t("pages.navigation.link")}
           </button>
         )}
         {page.textField2 && <Markdown>{page.textField2}</Markdown>}
@@ -72,11 +80,22 @@ export default function DefaultPage({ page }: { page: any }) {
             <Markdown>{page.accordionText}</Markdown>
           </Collapsable>
         )}
-        {page.questionType !== "none" && `Question type: ${page.questionType}`}
+        {page.questionType === "open" && (
+          <OpenQuestion
+            label={page.questionLabel}
+            answers={page.openQuestionAnswers}
+          />
+        )}
+        {page.questionType === "multiple_choice" && (
+          <MultipleChoiceQuestion
+            label={page.questionLabel}
+            answers={page.multipleChoiceAnswers}
+          />
+        )}
         {page.textField3 && <Markdown>{page.textField3}</Markdown>}
-        {page.hints && page.hints.length > 0 && (
+        {hints.length > 0 && (
           <div className="flex flex-col gap-2">
-            {page.hints.map((hint: any, index: number) => (
+            {hints.map((hint, index) => (
               <div className="bg-gray-75 rounded-md p-5" key={hint.id}>
                 <h1 className="font-bold">Hint {index + 1}</h1>
                 <p>{hint.text}</p>
@@ -85,51 +104,38 @@ export default function DefaultPage({ page }: { page: any }) {
           </div>
         )}
       </div>
-      {/* <DragDropProvider
-        onDragEnd={(event) => {
-          if (event.canceled) return;
-          const { source, target } = event.operation;
-          console.log(source?.id);
-          console.log(target?.id);
-
-          if (source?.id && target?.id) {
-            setTargets((prev) => ({
-              ...prev,
-              [source.id]: target.id,
-            }));
-          }
-        }}
-      >
-        {JSON.stringify(targets)}
-        <div className="bg-gray-100/50">
-          <div className="grid grid-cols-2 gap-4 p-4">
-            <ImageDroppable id="1" />
-            <ImageDroppable id="2" />
-            <ImageDroppable id="3" />
-            <ImageDroppable id="4" />
-          </div>
-        </div>
-
-        <Markdown>
-          Voluptate dolor ex tempor eu excepteur aute. Nisi commodo quis irure
-          sunt ex veniam Lorem tempor enim. Veniam id eu duis. Sit ex ea
-          incididunt velit tempor velit esse minim esse aliquip magna nulla
-          excepteur. Fugiat incididunt dolore adipisicing ad.
-        </Markdown>
-
-        <div className="Flex">
-          {!targets["1"] && <DraggableItem id="1" />}
-          <DraggableItem id="2" />
-          <DraggableItem id="3" />
-          <DraggableItem id="4" />
-        </div>
-      </DragDropProvider> */}
-      <NavigationPreferenceDialog
-        open={showPreferenceDialog}
-        onClose={setShowPreferenceDialog}
-        appleUrl={page.appleMapsUrl}
-        googleUrl={page.googleMapsUrl}
-      />
+      {hasNavigation && (
+        <NavigationPreferenceDialog
+          open={showPreferenceDialog}
+          onClose={setShowPreferenceDialog}
+          appleUrl={page.appleMapsUrl!}
+          googleUrl={page.googleMapsUrl!}
+        />
+      )}
+      <BottomNavigation>
+        {currentPage > 1 && (
+          <CircleButton onClick={() => previousPage()} className="shrink-0">
+            <ArrowLeftIcon className="w-5 fill-current" />
+          </CircleButton>
+        )}
+        {page.hints?.length > 0 && (
+          <Button
+            className="flex-1"
+            onClick={handleHints}
+            color="purple"
+            disabled={maxHintsReached || answerHook.isCorrect}
+          >
+            Hint
+          </Button>
+        )}
+        <Button
+          onClick={nextPage}
+          disabled={page.questionType !== "none" && !answerHook.isCorrect}
+          className="flex-2"
+        >
+          {page.buttonLabel?.trim() ? page.buttonLabel : t("common.next")}
+        </Button>
+      </BottomNavigation>
     </div>
   );
 }

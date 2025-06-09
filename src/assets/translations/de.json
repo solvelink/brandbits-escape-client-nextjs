@@ -1,3 +1,15 @@
 {
-  "welcome": "Willkommen bei der App"
+  "common": {
+    "yes": "Ja",
+    "no": "Nein",
+    "close": "Schließen",
+    "cancel": "Abbrechen",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "submit": "Absenden",
+    "continue": "Fortfahren",
+    "error": "Ein Fehler ist aufgetreten",
+    "loading": "Laden..."
+  },
+  "checkout": {}
 }

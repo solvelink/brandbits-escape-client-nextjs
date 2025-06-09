@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import mapboxgl, { MapOptions } from "mapbox-gl";
-import useEscapeStore from "@/stores/escapeStore";
+import useGameStore, { useGamePage } from "@/stores/gameStore";
+import { GameDefaultPage } from "@/types/game";
 
 const trimLineString = (
   lineString: GeoJSON.LineString,
@@ -14,24 +15,25 @@ const trimLineString = (
 };
 
 export const Map = ({ className }: { className?: string }) => {
+  const game = useGameStore((state) => state.game);
+  const page = useGamePage();
+
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const escapeStore = useEscapeStore();
-  const currentPage = escapeStore.game?.pages[escapeStore.currentPage]?.data[0];
-
   useEffect(() => {
-    const geoJson = JSON.parse(escapeStore.game.mapGeojson);
+    if (!game || !mapContainerRef.current) return;
+    const pageData = page?.data as GameDefaultPage | undefined;
+
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN!;
+    const geoJson = JSON.parse(game.escape.mapGeojson);
     const options: MapOptions = {
       container: mapContainerRef.current!,
-      style: escapeStore.game.mapboxStyleUrl,
+      style: game.escape.mapboxStyleUrl,
     };
-    if (currentPage.mapType === "start") {
-      options.center = [
-        escapeStore.game.mapStartLng,
-        escapeStore.game.mapStartLat,
-      ];
+
+    if (pageData?.mapType === "start") {
+      options.center = [game.escape.mapStartLng, game.escape.mapStartLat];
       options.zoom = 14;
     } else {
       const coordinates = geoJson.coordinates;
@@ -67,7 +69,7 @@ export const Map = ({ className }: { className?: string }) => {
     );
 
     mapRef.current.on("load", (event) => {
-      const isRange = currentPage.mapType === "range";
+      const isRange = pageData?.mapType === "range";
 
       const layers = event.target.getStyle().layers;
       let firstSymbolId;
@@ -77,7 +79,7 @@ export const Map = ({ className }: { className?: string }) => {
           break;
         }
       }
-      if (currentPage.mapType === "start") {
+      if (pageData?.mapType === "start") {
         event.target.loadImage("/start.png", (error, image) => {
           if (error) throw error;
           if (!image) throw new Error("Image not found");
@@ -93,8 +95,8 @@ export const Map = ({ className }: { className?: string }) => {
                   geometry: {
                     type: "Point",
                     coordinates: [
-                      escapeStore.game.mapStartLng,
-                      escapeStore.game.mapStartLat,
+                      game.escape.mapStartLng,
+                      game.escape.mapStartLat,
                     ],
                   },
                   properties: {},
@@ -118,7 +120,7 @@ export const Map = ({ className }: { className?: string }) => {
         event.target.addSource("FullLineString", {
           type: "geojson",
           data: isRange
-            ? trimLineString(geoJson, 0, currentPage.mapRangeEnd)
+            ? trimLineString(geoJson, 0, pageData.mapRangeEnd!)
             : geoJson,
         });
 
@@ -140,13 +142,13 @@ export const Map = ({ className }: { className?: string }) => {
           firstSymbolId
         );
 
-        if (currentPage.mapType === "range") {
+        if (isRange) {
           event.target.addSource("TrimmedLineString", {
             type: "geojson",
             data: trimLineString(
               geoJson,
-              currentPage.mapRangeStart,
-              currentPage.mapRangeEnd
+              pageData.mapRangeStart!,
+              pageData.mapRangeEnd!
             ),
           });
 
