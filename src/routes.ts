@@ -2,6 +2,7 @@ import { createBrowserRouter, redirect } from "react-router";
 import NotFound from "@/pages/NotFound";
 import { DefaultLayout } from "@/components/layout/DefaultLayout";
 import Invite from "./pages/Invite";
+import InviteLink from "./pages/InviteLink";
 import GameOnboarding from "./pages/game/Onboarding";
 import GamePage from "./pages/game/Page";
 import GameFinish from "./pages/game/Finish";
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
           {
             path: "invite",
             Component: Invite,
+          },
+          {
+            path: "invite/:code",
+            Component: InviteLink,
           },
         ],
       },
