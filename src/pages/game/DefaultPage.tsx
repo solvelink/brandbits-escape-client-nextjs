@@ -68,7 +68,7 @@ export default function DefaultPage({ page }: { page: GameDefaultPage }) {
         {hasNavigation && (
           <button
             onClick={openNavigation}
-            className="flex items-center text-turquoise underline"
+            className="flex items-center text-turquoise font-medium underline"
           >
             <MapPinIcon className="fill-current w-4 mr-1" />
             {t("pages.navigation.link")}
