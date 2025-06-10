@@ -5,49 +5,10 @@ import { Button } from "@/components/ui/button";
 import ArrowLeftIcon from "@/assets/icons/arrow-left.svg?react";
 import { CircleButton } from "@/components/ui/CircleButton";
 import { useGameNavigation } from "@/stores/gameStore";
-import { clsx } from "clsx";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/hooks/langauge";
 import { Map } from "@/components/game/Map";
-
-const Stats = ({
-  points,
-  time,
-  quickest,
-  distance,
-  active,
-}: {
-  points: number;
-  time: string;
-  quickest: string;
-  distance: string;
-  active?: boolean;
-}) => {
-  const StatsItem = ({ name, value }: { name: string; value: string }) => {
-    return (
-      <div
-        className={clsx(
-          " border rounded-md p-5",
-          active
-            ? "bg-green/10 border-green/20 text-green"
-            : "bg-gray-50 border-gray-100"
-        )}
-      >
-        <span className="opacity-80">{name}</span>
-        <p className="text-2xl font-medium">{value}</p>
-      </div>
-    );
-  };
-
-  return (
-    <div className="grid grid-cols-2 gap-3">
-      <StatsItem name="Punten" value={points.toString()} />
-      <StatsItem name="Tijd" value={time} />
-      <StatsItem name="Snelst" value={quickest} />
-      <StatsItem name="Afstand" value={distance} />
-    </div>
-  );
-};
+import { Stats } from "./Stats";
 
 export default function Finish() {
   const { t } = useTranslation();

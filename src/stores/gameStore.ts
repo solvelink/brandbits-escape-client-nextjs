@@ -88,6 +88,8 @@ export const useGamePage = () => {
   const pageContent = game.pages.find((page) => page.order === currentPage);
   if (!pageContent) return null;
 
+  const isMiddlePage = Math.floor(game.pages.length / 2) === currentPage;
+
   const pageData =
     pageContent.data.find((data) => data.language === language) ||
     pageContent.data.find((data) => data.language === Language.NL);
@@ -95,6 +97,7 @@ export const useGamePage = () => {
   return {
     ...pageContent,
     data: pageData,
+    isMiddlePage,
   };
 };
 

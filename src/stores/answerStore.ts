@@ -4,6 +4,7 @@ import { GameAnswerResponse, SetGameAnswerResponse } from "@/types/game";
 import { useEffect } from "react";
 import { create } from "zustand";
 import useGameStore, { useGamePage } from "./gameStore";
+import { AxiosError } from "axios";
 
 interface AnswerStoreState {
   answer: GameAnswerResponse | null;
@@ -31,7 +32,9 @@ const useAnswerStore = create<AnswerStoreState>((set, get) => ({
         state: LoadingState.IDLE,
       });
     } catch (error) {
-      console.error("Error fetching answer:", error);
+      if (error instanceof AxiosError && error.response?.status !== 404) {
+        console.error("Error fetching answer:", error);
+      }
       set({
         state: LoadingState.ERROR,
         answer: null,
