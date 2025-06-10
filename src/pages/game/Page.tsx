@@ -17,6 +17,7 @@ export default function Page() {
 
   useEffect(() => {
     gameStore.setCurrentPage(Number(params.page) - 1);
+    window.scrollTo(0, 0);
   }, [params.page]);
 
   useEffect(() => {
