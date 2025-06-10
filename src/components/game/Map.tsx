@@ -58,17 +58,17 @@ export const Map = ({ className }: { className?: string }) => {
     mapRef.current = new mapboxgl.Map(options);
 
     mapRef.current.addControl(new mapboxgl.NavigationControl());
-    mapRef.current.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true,
-        },
-        trackUserLocation: true,
-        showUserHeading: true,
-      })
-    );
+    const geolocateControl = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      trackUserLocation: true,
+      showUserHeading: true,
+    });
+    mapRef.current.addControl(geolocateControl);
 
     mapRef.current.on("load", (event) => {
+      geolocateControl.trigger();
       const isRange = pageData?.mapType === "range";
 
       const layers = event.target.getStyle().layers;
