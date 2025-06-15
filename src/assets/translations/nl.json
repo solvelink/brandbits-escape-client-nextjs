@@ -13,7 +13,12 @@
     "error": "Er is een fout opgetreden",
     "loading": "Laden...",
     "hint": "Hint",
-    "skip": "Sla over"
+    "skip": "Sla over",
+    "points": "Punten",
+    "time": "Tijd",
+    "quickest": "Snelst",
+    "distance": "Afstand",
+    "team": "Team"
   },
   "checkout": {
     "title": "Tickets bestellen",
@@ -21,8 +26,7 @@
     "team_label": "Groep tickets kopen",
     "free": "Gratis",
     "invite_button": "Ik heb een uitnodigingscode",
-    "ticket_one": "{{count}}x ticket",
-    "ticket_other": "{{count}}x tickets",
+    "ticket": "{count, plural, =1 {1x ticket} other {#x tickets}",
     "team_quantity": "Aantal teams",
     "payment_methods": "Betaalmethodes",
     "vat_included": "Inclusief BTW",
@@ -75,9 +79,45 @@
       "dialog_title": "Selecteer je navigatie app"
     },
     "answer_placeholder": "Typ hier je antwoord",
+    "start": {
+      "button": "Start de escape"
+    },
     "photo": {
       "button": "Maak een foto",
       "share_label": "Jou foto delen of opslaan via"
+    },
+    "status_first": {
+      "title": "Jullie staan bovenaan!",
+      "description": "Het andere team weet nu dat jullie op kop liggen. Blijf scherp en houd die voorsprong vast!",
+      "button": "Op naar de winst!"
+    },
+    "status_middle": {
+      "title": "Jullie staan op plek {number}",
+      "description": "Het andere team loopt voor, maar het is nog lang niet gedaan. Tijd om terug te vechten!",
+      "button": "Aan de slag!"
+    },
+    "status_last": {
+      "title": "Jullie staan op de laatste plek",
+      "description": "Het andere team loopt voor, maar het is nog lang niet gedaan. Tijd om terug te vechten!",
+      "button": "Tijd voor een comeback!"
     }
+  },
+  "finish": {
+    "title": "Gefeliciteerd!",
+    "description": "Voluptate dolor ex tempor eu excepteur aute. Nisi commodo quis irure sunt ex veniam Lorem tempor enim. Veniam id eu duis. Sit ex ea incididunt velit",
+    "results": "Resultaten:",
+    "results_team": "Resultaten team {name}:"
+  },
+  "ranking": {
+    "title": "Raking",
+    "description": "Voluptate dolor ex tempor eu excepteur aute. Nisi commodo quis irure sunt ex veniam Lorem tempor enim. Veniam id eu duis. Sit ex ea incididunt velit"
+  },
+  "feedback": {
+    "title": "Laat weten wat je er van vond",
+    "description": "We zijn benieuwd naar je mening! Laat ons weten wat je van de escape vond.",
+    "star_label": "Lorem ipsum",
+    "button": "Laat je feedback achter",
+    "button_tripadvisor": "laat je review achter op Tripadvisor",
+    "success": "Bedankt voor je feedback!"
   }
 }

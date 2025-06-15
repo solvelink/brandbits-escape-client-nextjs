@@ -1,10 +1,11 @@
+"use client";
+
 import { GameDefaultPage } from "@/types/game";
 import { Field, Input, Label } from "@headlessui/react";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import clsx from "clsx";
-import { useTranslation } from "react-i18next";
-import { useAnswer } from "@/stores/answerStore";
+import { useTranslations } from "next-intl";
 
 export const OpenQuestion = ({
   label,
@@ -13,12 +14,12 @@ export const OpenQuestion = ({
   label?: string;
   answers: GameDefaultPage["openQuestionAnswers"];
 }) => {
-  const answerHook = useAnswer();
-
-  const { t } = useTranslation();
+  const t = useTranslations();
   const [answer, setAnswer] = useState("");
   const [isIncorrect, setIsIncorrect] = useState(false);
-  const isValidForm = answer.trim() !== "" && !answerHook.isLoading;
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const isValidForm = answer.trim() !== "" && !isLoading;
 
   const submitAnswer = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -28,7 +29,7 @@ export const OpenQuestion = ({
     const isCorrect = validAnsers.includes(answerString.toLowerCase());
     if (isCorrect) {
       setIsIncorrect(false);
-      await answerHook.setAnswer(answerString);
+      // await answerHook.setAnswer(answerString);
     } else {
       setIsIncorrect(true);
     }
@@ -49,18 +50,18 @@ export const OpenQuestion = ({
           <Input
             className={clsx("input w-full", {
               error: isIncorrect,
-              success: answerHook.isCorrect,
+              success: isCorrect,
             })}
-            disabled={answerHook.isCorrect || answerHook.isLoading}
+            disabled={isCorrect || isLoading}
             placeholder={t("pages.answer_placeholder")}
-            value={answerHook.answer || answer}
+            value={answer}
             onChange={handleInputChange}
           />
           <Button
             type="submit"
             className="h-17"
             error={isIncorrect}
-            disabled={!isValidForm || answerHook.isCorrect}
+            disabled={!isValidForm || isCorrect}
           >
             {t("common.check")}
           </Button>

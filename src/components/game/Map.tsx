@@ -1,6 +1,7 @@
+"use client";
+
 import { useRef, useEffect } from "react";
 import mapboxgl, { MapOptions } from "mapbox-gl";
-import useGameStore, { useGamePage } from "@/stores/gameStore";
 import { GameDefaultPage } from "@/types/game";
 
 const trimLineString = (
@@ -15,8 +16,8 @@ const trimLineString = (
 };
 
 export const Map = ({ className }: { className?: string }) => {
-  const game = useGameStore((state) => state.game);
-  const page = useGamePage();
+  // const game = useGameStore((state) => state.game);
+  // const page = useGamePage();
 
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);

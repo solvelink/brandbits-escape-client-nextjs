@@ -1,14 +1,14 @@
-import IdealIcon from "@/assets/icons/methods/ideal.svg?react";
-import BancontactIcon from "@/assets/icons/methods/bancontact.svg?react";
-import VisaIcon from "@/assets/icons/methods/visa.svg?react";
-import MastercardIcon from "@/assets/icons/methods/mastercard.svg?react";
-import AmexIcon from "@/assets/icons/methods/amex.svg?react";
-import ApplePayIcon from "@/assets/icons/methods/apple-pay.svg?react";
-import PayPalIcon from "@/assets/icons/methods/paypal.svg?react";
-import { useTranslation } from "react-i18next";
+import IdealIcon from "@/assets/icons/methods/ideal.svg";
+import BancontactIcon from "@/assets/icons/methods/bancontact.svg";
+import VisaIcon from "@/assets/icons/methods/visa.svg";
+import MastercardIcon from "@/assets/icons/methods/mastercard.svg";
+import AmexIcon from "@/assets/icons/methods/amex.svg";
+import ApplePayIcon from "@/assets/icons/methods/apple-pay.svg";
+import PayPalIcon from "@/assets/icons/methods/paypal.svg";
+import { getTranslations } from "next-intl/server";
 
-export const PaymentMethods = () => {
-  const { t } = useTranslation();
+export const PaymentMethods = async () => {
+  const t = await getTranslations();
 
   return (
     <div className="text-center mt-6">

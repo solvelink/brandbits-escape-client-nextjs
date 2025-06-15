@@ -1,17 +1,16 @@
+"use client";
+
 import { Field, Input, Label, Transition } from "@headlessui/react";
 import { Button } from "../ui/button";
-import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import CheckmarkIcon from "@/assets/icons/checkmark.svg?react";
-import useCheckoutStore from "@/stores/checkoutStore";
-import { validateDiscountCode } from "@/api/routes";
-import useEscapeStore from "@/stores/escapeStore";
+import CheckmarkIcon from "@/assets/icons/checkmark.svg";
 import clsx from "clsx";
+import { useCheckoutStore } from "@/providers/checkoutStoreProvider";
+import { useTranslations } from "next-intl";
 
 export const DiscountCodeForm = () => {
-  const checkoutStore = useCheckoutStore();
-  const escape = useEscapeStore((state) => state.escape);
-  const { t } = useTranslation();
+  const checkoutStore = useCheckoutStore((state) => state);
+  const t = useTranslations();
 
   const hasDiscountCode = !!checkoutStore.discountCode;
   const [showField, setShowField] = useState(hasDiscountCode);
@@ -26,11 +25,11 @@ export const DiscountCodeForm = () => {
     try {
       setIsLoading(true);
       setErrorMessage(null);
-      const res = await validateDiscountCode(escape.id, code);
-      checkoutStore.setDiscountCode({
-        code: res.data.code,
-        amount: Number(res.data.amount),
-      });
+      // const res = await validateDiscountCode(escape.id, code);
+      // checkoutStore.setDiscountCode({
+      //   code: res.data.code,
+      //   amount: Number(res.data.amount),
+      // });
     } catch (error) {
       console.error("Error validating discount code:", error);
       setErrorMessage(t("checkout.discount.error"));

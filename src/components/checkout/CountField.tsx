@@ -1,5 +1,5 @@
-import MinusIcon from "@/assets/icons/minus.svg?react";
-import PlusIcon from "@/assets/icons/plus.svg?react";
+import MinusIcon from "@/assets/icons/minus.svg";
+import PlusIcon from "@/assets/icons/plus.svg";
 
 type CountFieldProps = {
   value: number;

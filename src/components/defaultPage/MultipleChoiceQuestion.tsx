@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, Field, Label } from "@headlessui/react";
 import { GameDefaultPage } from "@/types/game";
 // import { useAnswer } from "@/stores/answerStore";
@@ -18,7 +20,9 @@ export const MultipleChoiceQuestion = ({
       {label && <Label className="block font-semibold mb-3">{label}</Label>}
       <div className="flex flex-col gap-3">
         {answers?.map((answer, index) => (
-          <Button className="radio-item">{answer.label}</Button>
+          <Button key={index} className="radio-item">
+            {answer.label}
+          </Button>
         ))}
       </div>
     </Field>

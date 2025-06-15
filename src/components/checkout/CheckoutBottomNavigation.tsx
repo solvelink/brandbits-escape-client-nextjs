@@ -1,23 +1,26 @@
-import TicketIcon from "@/assets/icons/ticket.svg?react";
-import { useTranslation } from "react-i18next";
+"use client";
+
+import TicketIcon from "@/assets/icons/ticket.svg";
 import { formatPrice } from "@/utils/price";
-import useCheckoutStore from "@/stores/checkoutStore";
-import { useEscape } from "@/stores/escapeStore";
 import { ProductType } from "@/types/enum";
+import { useTranslations } from "next-intl";
+import { Escape } from "@/types/escapes";
+import { useCheckoutStore } from "@/providers/checkoutStoreProvider";
 
 export const CheckoutBottomNavigation = ({
   children,
+  escape,
 }: {
   children: React.ReactNode;
+  escape: Escape;
 }) => {
-  const checkoutStore = useCheckoutStore();
-  const escape = useEscape();
-  const { t } = useTranslation();
+  const t = useTranslations();
+  const checkoutStore = useCheckoutStore((state) => state);
 
   const isTeam = checkoutStore.type === ProductType.Team;
   const price = isTeam
-    ? checkoutStore.quantity * (escape?.priceTeams ?? 0)
-    : escape?.priceSingle ?? 0;
+    ? checkoutStore.quantity * Number(escape.priceTeams)
+    : Number(escape.priceSingle) ?? 0;
   const discountAmount = checkoutStore.discountAmount ?? 0;
   const finalPrice = price - (price * discountAmount) / 100;
   const quantity = isTeam ? checkoutStore.quantity : 1;

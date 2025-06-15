@@ -1,16 +1,17 @@
+"use client";
+
 import * as Headless from "@headlessui/react";
 import clsx from "clsx";
 import { forwardRef } from "react";
-import { Link, LinkProps } from "react-router";
+import { Link } from "@/i18n/navigation";
 
 type ButtonProps = {
   className?: string;
   disabled?: boolean;
   children: React.ReactNode;
 } & (
-  | Omit<Headless.ButtonProps, "as" | "className" | "disabled">
-  | Omit<LinkProps, "className">
-  | { href: string }
+  | Omit<Headless.ButtonProps, "as" | "className">
+  | Omit<React.ComponentProps<typeof Link>, "className">
 );
 
 export const CircleButton = forwardRef(
@@ -23,7 +24,7 @@ export const CircleButton = forwardRef(
       "w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold border-2 border-purple"
     );
 
-    if ("to" in props) {
+    if ("href" in props) {
       return (
         <Link
           {...props}
@@ -32,17 +33,6 @@ export const CircleButton = forwardRef(
         >
           {children}
         </Link>
-      );
-    }
-    if ("href" in props) {
-      return (
-        <a
-          {...props}
-          className={classes}
-          ref={ref as React.ForwardedRef<HTMLAnchorElement>}
-        >
-          {children}
-        </a>
       );
     }
     return (

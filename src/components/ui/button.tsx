@@ -1,7 +1,9 @@
+"use client";
+
 import * as Headless from "@headlessui/react";
-import { Link, LinkProps } from "react-router";
 import { forwardRef } from "react";
 import clsx from "clsx";
+import { Link } from "@/i18n/navigation";
 
 const styles = {
   base: [
@@ -27,8 +29,7 @@ type ButtonProps = {
   children: React.ReactNode;
 } & (
   | Omit<Headless.ButtonProps, "as" | "className" | "disabled">
-  | Omit<LinkProps, "className">
-  | { href: string }
+  | Omit<React.ComponentProps<typeof Link>, "className">
 );
 
 export const Button = forwardRef(
@@ -42,7 +43,7 @@ export const Button = forwardRef(
       error ? styles.error : styles.colors[color ?? "turquoise"]
     );
 
-    if ("to" in props) {
+    if ("href" in props) {
       return (
         <Link
           {...props}
@@ -51,17 +52,6 @@ export const Button = forwardRef(
         >
           {children}
         </Link>
-      );
-    }
-    if ("href" in props) {
-      return (
-        <a
-          {...props}
-          className={classes}
-          ref={ref as React.ForwardedRef<HTMLAnchorElement>}
-        >
-          {children}
-        </a>
       );
     }
     return (

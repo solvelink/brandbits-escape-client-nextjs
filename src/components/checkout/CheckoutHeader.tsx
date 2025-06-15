@@ -1,4 +1,4 @@
-import ArrowLeftIcon from "@/assets/icons/arrow-left.svg?react";
+import ArrowLeftIcon from "@/assets/icons/arrow-left.svg";
 
 export const CheckoutHeader = ({
   title,

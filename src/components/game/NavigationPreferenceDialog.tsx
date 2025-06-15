@@ -1,31 +1,33 @@
+"use client";
+
 import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import CrossIcon from "@/assets/icons/cross.svg?react";
+import CrossIcon from "@/assets/icons/cross.svg";
 import { Button } from "../ui/button";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 export const NavigationPreferenceDialog = ({
   open,
   onClose,
-  appleUrl,
-  googleUrl,
+  appleMapsUrl,
+  googleMapsUrl,
 }: {
   open: boolean;
   onClose: (value: boolean) => void;
-  appleUrl: string;
-  googleUrl: string;
+  appleMapsUrl: string;
+  googleMapsUrl: string;
 }) => {
-  const { t } = useTranslation();
+  const t = useTranslations();
 
   const openLink = (type: "apple" | "google") => {
     if (type === "apple") {
-      window.open(appleUrl, "_blank");
+      window.open(appleMapsUrl, "_blank");
     } else {
-      window.open(googleUrl, "_blank");
+      window.open(googleMapsUrl, "_blank");
     }
     localStorage.setItem("escape_navigation_preference", type);
     onClose(false);

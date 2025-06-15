@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Disclosure,
   DisclosureButton,
@@ -5,7 +7,7 @@ import {
 } from "@headlessui/react";
 import { Fragment } from "react";
 import { AnimatePresence, easeOut, motion } from "framer-motion";
-import ChevronDownIcon from "@/assets/icons/chevron-down.svg?react";
+import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
 import clsx from "clsx";
 
 export const Collapsable = ({

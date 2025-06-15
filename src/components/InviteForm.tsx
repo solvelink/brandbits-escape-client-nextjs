@@ -1,18 +1,14 @@
-import { useEscape } from "@/stores/escapeStore";
-import useGameStore from "@/stores/gameStore";
+"use client";
+
 import { Field, Input, Label } from "@headlessui/react";
 import clsx from "clsx";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
-import { redeemInviteCode } from "@/api/routes";
-import { useLanguage } from "@/hooks/langauge";
+import { useTranslations } from "next-intl";
+import { Escape } from "@/types/escapes";
 
-export const InviteForm = () => {
-  const gameStore = useGameStore();
-  const escape = useEscape();
-  const { t } = useTranslation();
-  const { navigate } = useLanguage();
+export const InviteForm = ({ escape }: { escape: Escape }) => {
+  const t = useTranslations();
 
   const [code, setCode] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -28,9 +24,9 @@ export const InviteForm = () => {
     try {
       setIsLoading(true);
       const numericCode = code.replace(/[^0-9]/g, "");
-      const res = await redeemInviteCode(window.location.hostname, numericCode);
-      gameStore.setGameToken(res.data.gameToken);
-      navigate("game/1");
+      // const res = await redeemInviteCode(window.location.hostname, numericCode);
+      // gameStore.setGameToken(res.data.gameToken);
+      // navigate("game/1");
     } catch (error) {
       console.error("Error submitting invite code:", error);
       setErrorMessage(t("invite.error"));

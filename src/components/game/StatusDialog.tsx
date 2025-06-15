@@ -1,20 +1,27 @@
-import { StatsItem } from "@/pages/game/Stats";
+"use client";
+
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import { Button } from "../ui/button";
+import { StatsItem } from "./Stats";
+import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
-export const StatusDialog = ({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: (value: boolean) => void;
-}) => {
+export const StatusDialog = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const t = useTranslations();
+
+  useEffect(() => {
+    setIsOpen(true);
+  }, []);
+
+  // status_first / status_middle / status_last
+
   return (
     <Dialog
-      open={open}
+      open={isOpen}
+      onClose={setIsOpen}
       as="div"
       className="relative z-30 focus:outline-none"
-      onClose={onClose}
     >
       <DialogBackdrop
         transition
@@ -28,19 +35,18 @@ export const StatusDialog = ({
           >
             <div className="bg-gray-100 rounded-sm h-54" />
             <div className="mt-4 text-center">
-              <h3 className="text-xl font-semibold">Jullie staan voor!</h3>
-              <p className="mt-2">
-                Het andere team weet nu dat jullie op kop liggen. Blijf scherp
-                en houd die voorsprong vast!
-              </p>
+              <h3 className="text-xl font-semibold">
+                {t("pages.status_first.title")}
+              </h3>
+              <p className="mt-2">{t("pages.status_first.description")}</p>
               <div className="py-6">
                 <div className="grid grid-cols-2 gap-3">
                   <StatsItem name="Punten" value={(200).toString()} />
                   <StatsItem name="Laatse vraag" value={"Vraag 9"} />
                 </div>
               </div>
-              <Button onClick={() => onClose(false)} className="w-full">
-                Op naar de winst!
+              <Button onClick={() => setIsOpen(false)} className="w-full">
+                {t("pages.status_first.button")}
               </Button>
             </div>
           </DialogPanel>

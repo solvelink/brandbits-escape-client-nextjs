@@ -1,9 +1,10 @@
 import * as yup from "yup";
 import { nl, en, de } from "yup-locales";
-import i18next from "i18next";
+import { useLocale } from "next-intl";
 
-i18next.on("languageChanged", (lng) => {
-  switch (lng) {
+export const useYup = () => {
+  const locale = useLocale();
+  switch (locale) {
     case "de":
       yup.setLocale(de);
       break;
@@ -13,6 +14,6 @@ i18next.on("languageChanged", (lng) => {
     default:
       yup.setLocale(nl);
   }
-});
 
-export { yup };
+  return yup;
+};
