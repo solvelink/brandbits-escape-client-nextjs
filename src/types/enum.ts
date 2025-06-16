@@ -20,3 +20,23 @@ export enum PageType {
   StartPage = "start_page",
   PhotoPage = "photo_page",
 }
+
+export enum DefaultHeaderType {
+  None = "none",
+  Image = "image",
+  Video = "video",
+  Map = "map",
+}
+
+export enum StartHeaderType {
+  Carousel = "carousel",
+  VideoScrubber = "video_scrubber",
+}
+
+export enum QuestionType {
+  None = "none",
+  Open = "open",
+  MultipleChoice = "multiple_choice",
+  NumberAssociation = "number_association",
+  AudioAssociation = "audio_association",
+}

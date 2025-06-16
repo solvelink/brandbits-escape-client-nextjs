@@ -4,7 +4,7 @@ import { CircleButton } from "@/components/ui/CircleButton";
 import { getTranslations } from "next-intl/server";
 import ArrowLeftIcon from "@/assets/icons/arrow-left.svg";
 import { Button } from "@/components/ui/button";
-import { getGame } from "@/repository/routes";
+import { getGame } from "@/repository/server";
 
 export default async function Ranking() {
   const t = await getTranslations();

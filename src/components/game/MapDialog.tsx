@@ -1,5 +1,5 @@
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
-import CrossIcon from "@/assets/icons/cross.svg?react";
+import CrossIcon from "@/assets/icons/cross.svg";
 import { Map } from "@/components/game/Map";
 
 export const MapDialog = ({

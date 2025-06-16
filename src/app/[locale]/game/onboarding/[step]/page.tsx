@@ -7,7 +7,7 @@ import { getTranslations } from "next-intl/server";
 import { BottomNavigation } from "@/components/ui/BottomNavigation";
 import { Button } from "@/components/ui/button";
 import { TeamNameModal } from "@/components/TeamNameModal";
-import { getGame } from "@/repository/routes";
+import { getGame } from "@/repository/server";
 
 const steps = [
   {

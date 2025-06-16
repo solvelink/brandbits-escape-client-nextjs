@@ -5,8 +5,9 @@ import { Button } from "../ui/button";
 import { StatsItem } from "./Stats";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Game } from "@/types/game";
 
-export const StatusDialog = () => {
+export const StatusDialog = ({ game }: { game: Game }) => {
   const [isOpen, setIsOpen] = useState(false);
   const t = useTranslations();
 

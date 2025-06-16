@@ -2,13 +2,15 @@
 
 import { Field, Input, Label, Transition } from "@headlessui/react";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CheckmarkIcon from "@/assets/icons/checkmark.svg";
 import clsx from "clsx";
-import { useCheckoutStore } from "@/providers/checkoutStoreProvider";
+import { useCheckoutStore } from "@/providers/CheckoutStoreProvider";
 import { useTranslations } from "next-intl";
+import { validateDiscountCode } from "@/repository/routes";
+import { Escape } from "@/types/escapes";
 
-export const DiscountCodeForm = () => {
+export const DiscountCodeForm = ({ escape }: { escape: Escape }) => {
   const checkoutStore = useCheckoutStore((state) => state);
   const t = useTranslations();
 
@@ -17,7 +19,8 @@ export const DiscountCodeForm = () => {
   const [code, setCode] = useState(checkoutStore.discountCode || "");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const isValidForm = code.trim() !== "" && !isLoading && escape;
+
+  const isValidForm = code.trim() !== "" && !isLoading;
 
   const submitDiscountCode = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -25,11 +28,11 @@ export const DiscountCodeForm = () => {
     try {
       setIsLoading(true);
       setErrorMessage(null);
-      // const res = await validateDiscountCode(escape.id, code);
-      // checkoutStore.setDiscountCode({
-      //   code: res.data.code,
-      //   amount: Number(res.data.amount),
-      // });
+      const data = await validateDiscountCode(escape.id, code);
+      checkoutStore.setDiscountCode({
+        code: data.code,
+        amount: Number(data.amount),
+      });
     } catch (error) {
       console.error("Error validating discount code:", error);
       setErrorMessage(t("checkout.discount.error"));
@@ -39,9 +42,11 @@ export const DiscountCodeForm = () => {
     }
   };
 
-  if (hasDiscountCode) {
-    submitDiscountCode();
-  }
+  useEffect(() => {
+    if (hasDiscountCode) {
+      submitDiscountCode();
+    }
+  }, []);
 
   const removeDiscountCode = () => {
     setCode("");

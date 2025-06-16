@@ -5,7 +5,7 @@ import { formatPrice } from "@/utils/price";
 import { ProductType } from "@/types/enum";
 import { useTranslations } from "next-intl";
 import { Escape } from "@/types/escapes";
-import { useCheckoutStore } from "@/providers/checkoutStoreProvider";
+import { useCheckoutStore } from "@/providers/CheckoutStoreProvider";
 
 export const CheckoutBottomNavigation = ({
   children,

@@ -1,6 +1,6 @@
 import { CheckoutHeader } from "@/components/checkout/CheckoutHeader";
 import { InviteForm } from "@/components/InviteForm";
-import { getEscape } from "@/repository/routes";
+import { getEscape } from "@/repository/server";
 import { getTranslations } from "next-intl/server";
 
 export default async function InvitePage() {

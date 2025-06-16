@@ -6,9 +6,12 @@ import { useMemo, useState } from "react";
 import { Button } from "./ui/button";
 import { useTranslations } from "next-intl";
 import { Escape } from "@/types/escapes";
+import { redeemInviteCode } from "@/app/actions";
+import { useRouter } from "@/i18n/navigation";
 
 export const InviteForm = ({ escape }: { escape: Escape }) => {
   const t = useTranslations();
+  const router = useRouter();
 
   const [code, setCode] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -24,9 +27,8 @@ export const InviteForm = ({ escape }: { escape: Escape }) => {
     try {
       setIsLoading(true);
       const numericCode = code.replace(/[^0-9]/g, "");
-      // const res = await redeemInviteCode(window.location.hostname, numericCode);
-      // gameStore.setGameToken(res.data.gameToken);
-      // navigate("game/1");
+      await redeemInviteCode(numericCode);
+      router.push("/game/1");
     } catch (error) {
       console.error("Error submitting invite code:", error);
       setErrorMessage(t("invite.error"));
@@ -68,7 +70,7 @@ export const InviteForm = ({ escape }: { escape: Escape }) => {
         disabled={!isValidForm}
         type="submit"
       >
-        {t("common.continue")}
+        {isLoading ? t("common.loading") : t("common.continue")}
       </Button>
     </form>
   );

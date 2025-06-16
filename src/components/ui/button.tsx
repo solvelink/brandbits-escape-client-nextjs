@@ -43,12 +43,27 @@ export const Button = forwardRef(
       error ? styles.error : styles.colors[color ?? "turquoise"]
     );
 
+    const onDisabledClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+      const target = e.target as HTMLElement;
+      target.classList.add("animate-shake");
+      setTimeout(() => {
+        target.classList.remove("animate-shake");
+      }, 600);
+    };
+
     if ("href" in props) {
       return (
         <Link
           {...props}
           className={classes}
           ref={ref as React.ForwardedRef<HTMLAnchorElement>}
+          data-disabled={disabled ? "true" : undefined}
+          onClick={(e) => {
+            if (disabled) {
+              onDisabledClick(e);
+            }
+          }}
         >
           {children}
         </Link>
@@ -62,12 +77,7 @@ export const Button = forwardRef(
         data-disabled={disabled ? "true" : undefined}
         onClick={(e) => {
           if (disabled) {
-            e.preventDefault();
-            const target = e.target as HTMLElement;
-            target.classList.add("animate-shake");
-            setTimeout(() => {
-              target.classList.remove("animate-shake");
-            }, 600);
+            onDisabledClick(e);
           } else {
             props.onClick?.(e);
           }

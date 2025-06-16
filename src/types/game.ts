@@ -1,4 +1,10 @@
-import { Language, PageType } from "./enum";
+import {
+  DefaultHeaderType,
+  Language,
+  PageType,
+  QuestionType,
+  StartHeaderType,
+} from "./enum";
 
 export interface Game {
   id: number;
@@ -19,6 +25,9 @@ export interface Game {
     emailDomain: string;
     createdAt: string;
     updatedAt: string;
+    escapeContent: {
+      progressImageUrl?: string;
+    };
   };
   pages: GamePage[];
 }
@@ -46,19 +55,24 @@ export interface GameStartPage {
   id: number;
   language: Language;
   pageId: number;
+  headerType: StartHeaderType;
+  headerVideoUrl?: string;
   title: string;
   subtitle: string;
   description: string;
-  duration?: string;
-  distance?: string;
-  accessibility?: string;
-  demographic?: string;
+  listLabel: string;
   images: {
     id: number;
     startPageId: number;
     imageUrl: string;
     text: string;
     order: number;
+  }[];
+  listItems: {
+    id: number;
+    startPageId: number;
+    text: string;
+    svgPath: string;
   }[];
 }
 
@@ -67,23 +81,26 @@ export interface GameDefaultPage {
   language: Language;
   pageId: number;
   showProgressHeader: boolean;
-  headerType: string;
+  headerType: DefaultHeaderType;
   headerImageUrl?: string;
   headerVideoUrl?: string;
   headerSize: string;
   mapType: string;
   mapRangeStart?: number;
   mapRangeEnd?: number;
+  isTextCentered: boolean;
   title?: string;
   textField1?: string;
   textField2?: string;
   textField3?: string;
   appleMapsUrl?: string;
   googleMapsUrl?: string;
+  audioUrl?: string;
+  audioLabel?: string;
   accordionTitle?: string;
   accordionText?: string;
   questionLabel?: string;
-  questionType: string;
+  questionType: QuestionType;
   buttonLabel?: string;
   hints: {
     id: number;

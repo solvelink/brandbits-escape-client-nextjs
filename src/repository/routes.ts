@@ -1,104 +1,47 @@
-import { Escape } from "@/types/escapes";
-import { getLocale } from "next-intl/server";
-import { getHostname } from "./helpers";
-import { cookies } from "next/headers";
-// import { client } from "./client";
-// import { CreateOrderData, CreateOrderResponse } from "@/types/orders";
-import {
-  Game,
-  //   GameAnswer,
-  //   GameAnswerData,
-  //   GameAnswerResponse,
-  //   SetGameAnswerResponse,
-} from "@/types/game";
+import { CreateOrderData, CreateOrderResponse } from "@/types/orders";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE;
 
-export const getEscape = async () => {
-  const locale = await getLocale();
-  const hostname = await getHostname();
-  const data = await fetch(`${baseUrl}/v1/escapes/domain/${hostname}`, {
-    headers: {
-      "Accept-Language": locale,
-    },
-  });
+export const validateDiscountCode = async (
+  id: string | number,
+  code: string
+) => {
+  const data = await fetch(
+    `${baseUrl}/v1/escapes/${id}/discount-codes/validate`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ code }),
+    }
+  );
   if (!data.ok) {
-    throw new Error("Failed to fetch escape data");
+    throw new Error("Failed to validate discount code");
   }
-  return data.json() as Promise<Escape>;
+  return data.json() as Promise<{
+    valid: boolean;
+    amount: string;
+    code: string;
+  }>;
 };
 
-// export const validateDiscountCode = (id: string | number, code: string) => {
-//   return client.post<{ valid: boolean; amount: string; code: string }>(
-//     `/v1/escapes/${id}/discount-codes/validate`,
-//     { code }
-//   );
-// };
-
-// export const createOrder = (id: string | number, data: CreateOrderData) => {
-//   return client.post<CreateOrderResponse>(`/v1/orders/${id}/checkout`, data);
-// };
-
-export const redeemInviteCode = async (code: string) => {
-  const hostname = await getHostname();
-  const data = await fetch(`${baseUrl}/v1/game/${hostname}/redeem`, {
+export const createOrder = async (
+  id: string | number,
+  body: CreateOrderData
+) => {
+  const data = await fetch(`${baseUrl}/v1/orders/${id}/checkout`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ code }),
+    body: JSON.stringify(body),
   });
   if (!data.ok) {
-    throw new Error("Failed to redeem invite code");
+    throw new Error("Failed to create order");
   }
-  return data.json() as Promise<{ gameToken: string }>;
+  return data.json() as Promise<CreateOrderResponse>;
 };
-
-export const getGame = async () => {
-  const locale = await getLocale();
-  const cookieStore = await cookies();
-  const gameToken = cookieStore.get("gameToken");
-  if (!gameToken) {
-    throw new Error("Game token not found in cookies");
-  }
-
-  const data = await fetch(`${baseUrl}/v1/game`, {
-    headers: {
-      Authorization: `Bearer ${gameToken.value}`,
-      "Accept-Language": locale,
-    },
-  });
-  if (!data.ok) {
-    throw new Error("Failed to fetch game data");
-  }
-  return data.json() as Promise<Game>;
-};
-
-// export const startGame = (gameToken: string, teamName: string) => {
-//   return client.post<{ message: string }>(
-//     "/v1/game/start",
-//     {
-//       teamName,
-//     },
-//     {
-//       headers: {
-//         Authorization: `Bearer ${gameToken}`,
-//       },
-//     }
-//   );
-// };
-
-// export const setPageAnswer = (
-//   gameToken: string,
-//   pageId: number,
-//   data: GameAnswer
-// ) => {
-//   return client.post<SetGameAnswerResponse>(`/v1/game/answer/${pageId}`, data, {
-//     headers: {
-//       Authorization: `Bearer ${gameToken}`,
-//     },
-//   });
-// };
 
 // export const getPageAnswer = (gameToken: string, pageId: number) => {
 //   return client.get<GameAnswerResponse>(`/v1/game/answer/${pageId}`, {

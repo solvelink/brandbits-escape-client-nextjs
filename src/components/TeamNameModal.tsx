@@ -7,9 +7,12 @@ import { Markdown } from "./Markdown";
 import { Field, Input } from "@headlessui/react";
 import clsx from "clsx";
 import { Button } from "./ui/button";
+import { startGame } from "@/app/actions";
+import { useRouter } from "@/i18n/navigation";
 
 export const TeamNameModal = ({ game }: { game: Game }) => {
   const t = useTranslations();
+  const router = useRouter();
   const [teamName, setTeamName] = useState(game.teamName || "");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -21,8 +24,8 @@ export const TeamNameModal = ({ game }: { game: Game }) => {
     try {
       setIsLoading(true);
       setErrorMessage(null);
-      // await startGame(gameStore.gameToken!, teamName);
-      // navigate("game/2");
+      await startGame(teamName);
+      router.push("/game/2");
     } catch (error) {
       console.error("Error starting game:", error);
       setErrorMessage(t("common.error"));

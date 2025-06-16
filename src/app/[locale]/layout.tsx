@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import type { Metadata, Viewport } from "next";
 import "@/assets/css/style.css";
-import { getEscape } from "@/repository/routes";
+import { getEscape } from "@/repository/server";
 
 export const viewport: Viewport = {
   themeColor: "#211d47",
@@ -11,8 +11,18 @@ export const viewport: Viewport = {
 
 export async function generateMetadata(): Promise<Metadata> {
   const escape = await getEscape();
+
   return {
     title: `${escape.name} Escape`,
+    ...(escape.faviconUrl && {
+      icons: {
+        icon: {
+          url: escape.faviconUrl,
+          sizes: "255x255",
+          type: "image/x-icon",
+        },
+      },
+    }),
   };
 }
 

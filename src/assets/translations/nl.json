@@ -26,7 +26,7 @@
     "team_label": "Groep tickets kopen",
     "free": "Gratis",
     "invite_button": "Ik heb een uitnodigingscode",
-    "ticket": "{count, plural, =1 {1x ticket} other {#x tickets}",
+    "ticket": "{count, plural, =1 {1x ticket} other {#x tickets}}",
     "team_quantity": "Aantal teams",
     "payment_methods": "Betaalmethodes",
     "vat_included": "Inclusief BTW",
@@ -119,5 +119,10 @@
     "button": "Laat je feedback achter",
     "button_tripadvisor": "laat je review achter op Tripadvisor",
     "success": "Bedankt voor je feedback!"
+  },
+  "invite_error": {
+    "title": "Ongeldige uitnodigings link",
+    "description": "De link die je hebt gebruikt is ongeldig of verlopen. Controleer de link en probeer het opnieuw.",
+    "button": "Naar aankooppagina"
   }
 }

@@ -20,7 +20,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useYup } from "@/utils/validation";
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { useCheckoutStore } from "@/providers/checkoutStoreProvider";
+import { useCheckoutStore } from "@/providers/CheckoutStoreProvider";
+import { createOrder } from "@/repository/routes";
+import { Escape } from "@/types/escapes";
+import { useRouter } from "@/i18n/navigation";
 // import { createOrder } from "@/api/routes";
 // import useCheckoutStore from "@/stores/checkoutStore";
 
@@ -30,11 +33,12 @@ const languages = [
   { label: "Deutsch", value: "de", icon: DEIcon },
 ];
 
-export const CheckoutInfoForm = () => {
+export const CheckoutInfoForm = ({ escape }: { escape: Escape }) => {
   const locale = useLocale();
   const yup = useYup();
-  const checkoutStore = useCheckoutStore((state) => state);
   const t = useTranslations();
+  const router = useRouter();
+  const checkoutStore = useCheckoutStore((state) => state);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -67,32 +71,32 @@ export const CheckoutInfoForm = () => {
     (language) => language.value === languageValue
   )!;
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (body) => {
     if (isLoading) return;
     try {
       setIsLoading(true);
       setErrorMessage(null);
-      // const res = await createOrder(escape!.id, {
-      //   productType: checkoutStore.type,
-      //   quantity: checkoutStore.quantity,
-      //   contactData: {
-      //     name: data.name,
-      //     email: data.email,
-      //     address: data.address,
-      //     zipcode: data.zipcode,
-      //     city: data.city,
-      //   },
-      //   language: data.language,
-      //   discountCode: checkoutStore.discountCode,
-      // });
-      // checkoutStore.clear();
-      // if (res.data.status === "redirect") {
-      //   window.location.href = res.data.redirectUrl;
-      // } else if (res.data.status === "success") {
-      //   navigate("success");
-      // } else {
-      //   throw new Error("unknown response status from server");
-      // }
+      const data = await createOrder(escape.id, {
+        productType: checkoutStore.type,
+        quantity: checkoutStore.quantity,
+        contactData: {
+          name: body.name,
+          email: body.email,
+          address: body.address,
+          zipcode: body.zipcode,
+          city: body.city,
+        },
+        language: body.language,
+        discountCode: checkoutStore.discountCode,
+      });
+      checkoutStore.clear();
+      if (data.status === "redirect") {
+        window.location.href = data.redirectUrl;
+      } else if (data.status === "success") {
+        router.push("success");
+      } else {
+        throw new Error("unknown response status from server");
+      }
     } catch (error) {
       console.error("Error creating order:", error);
       setErrorMessage(t("checkout.form.error"));

@@ -2,7 +2,7 @@ import { DefaultPage } from "@/components/game/DefaultPage";
 import { PhotoPage } from "@/components/game/PhotoPage";
 import { StartPage } from "@/components/game/StartPage";
 import { StatusDialog } from "@/components/game/StatusDialog";
-import { getGame } from "@/repository/routes";
+import { getGame } from "@/repository/server";
 import { PageType } from "@/types/enum";
 import { notFound } from "next/navigation";
 
@@ -24,8 +24,6 @@ export default async function GameStep({
   const isCenterPage =
     totalPages > 0 && currentPage.order === Math.floor(totalPages / 2);
 
-  console.log("middle page:", isCenterPage, currentPage.order, totalPages);
-
   const PageContent = () => {
     if (currentPage.type === PageType.StartPage) {
       return <StartPage page={currentPage.data[0]} />;
@@ -41,7 +39,7 @@ export default async function GameStep({
   return (
     <>
       <PageContent />
-      {isCenterPage && <StatusDialog />}
+      {isCenterPage && <StatusDialog game={game} />}
     </>
   );
 }

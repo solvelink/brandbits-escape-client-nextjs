@@ -6,6 +6,7 @@ export interface Escape {
   priceSingle: string;
   priceTeams: string;
   theme?: string;
+  faviconUrl?: string;
   escapeContent: EscapeContent[];
 }
 
@@ -13,6 +14,7 @@ export interface EscapeContent {
   id: number;
   escapeId: number;
   language: Language;
+  websiteUrl: string;
   checkoutImageUrl: string;
   checkoutTitle: string;
   checkoutDescription: string;

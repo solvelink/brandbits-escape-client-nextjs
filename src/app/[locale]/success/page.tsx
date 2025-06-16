@@ -1,5 +1,5 @@
 import { CheckoutHeader } from "@/components/checkout/CheckoutHeader";
-import { getEscape } from "@/repository/routes";
+import { getEscape } from "@/repository/server";
 import { getTranslations } from "next-intl/server";
 
 export default async function CheckoutSuccess() {

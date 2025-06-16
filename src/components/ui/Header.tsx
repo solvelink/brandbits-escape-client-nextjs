@@ -5,6 +5,7 @@ import { Button } from "@headlessui/react";
 import clsx from "clsx";
 import { MapDialog } from "../game/MapDialog";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 export const HeaderBar = ({
   children,
@@ -69,6 +70,7 @@ export const Header = ({
 }) => {
   const t = useTranslations();
   const highlightClass = "relative z-15 pointer-events-none";
+  const [showMapDialog, setShowMapDialog] = useState(false);
 
   return (
     <HeaderBar className={clsx("h-32", className)} sticky={sticky}>
@@ -91,7 +93,7 @@ export const Header = ({
             >
               {String(points).padStart(3, "0")}
             </div>
-            {/* <Button
+            <Button
               className={clsx(
                 "bg-purple w-14 h-14 flex items-center justify-center rounded-full",
                 highlight === "map" && highlightClass
@@ -99,7 +101,7 @@ export const Header = ({
               onClick={() => setShowMapDialog(true)}
             >
               <MapIcon className="fill-current w-7" />
-            </Button> */}
+            </Button>
           </div>
         </div>
         <ProgressBar
@@ -107,7 +109,7 @@ export const Header = ({
           className={clsx("mt-4", highlight === "progress" && highlightClass)}
         />
       </div>
-      {/* <MapDialog open={showMapDialog} onClose={setShowMapDialog} /> */}
+      <MapDialog open={showMapDialog} onClose={setShowMapDialog} />
     </HeaderBar>
   );
 };

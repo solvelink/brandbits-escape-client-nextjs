@@ -2,11 +2,13 @@
 
 import { Game } from "@/types/game";
 import { Header, HeaderBar } from "../ui/Header";
-import { notFound, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { PageType } from "@/types/enum";
 import { usePathname } from "@/i18n/navigation";
+import { useGameStore } from "@/stores/gameStore";
 
 export const GameHeader = ({ game }: { game: Game }) => {
+  const points = useGameStore((state) => state.points);
   const params = useParams();
   const pathname = usePathname();
   const isOnboarding = pathname.includes("onboarding");
@@ -24,11 +26,7 @@ export const GameHeader = ({ game }: { game: Game }) => {
       currentPage.data[0].showProgressHeader)
   ) {
     return (
-      <Header
-        progress={progress}
-        points={game.points}
-        teamName={game.teamName}
-      />
+      <Header progress={progress} points={points} teamName={game.teamName} />
     );
   }
 

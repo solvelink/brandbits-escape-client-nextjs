@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
-import RankGoldIcon from "@/assets/icons/rank-gold.svg?react";
-import RankSilverIcon from "@/assets/icons/rank-silver.svg?react";
-import RankBronzeIcon from "@/assets/icons/rank-bronze.svg?react";
+import RankGoldIcon from "@/assets/icons/rank-gold.svg";
+import RankSilverIcon from "@/assets/icons/rank-silver.svg";
+import RankBronzeIcon from "@/assets/icons/rank-bronze.svg";
 
 const RankIcon = ({
   number,

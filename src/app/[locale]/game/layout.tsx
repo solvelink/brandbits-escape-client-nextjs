@@ -1,5 +1,6 @@
 import { GameHeader } from "@/components/game/GameHeader";
-import { getGame } from "@/repository/routes";
+import GameStoreProvider from "@/providers/GameStoreProvider";
+import { getGame } from "@/repository/server";
 import type { Viewport } from "next";
 
 export const viewport: Viewport = {
@@ -14,9 +15,9 @@ export default async function GameLayout({
   const game = await getGame();
 
   return (
-    <div>
+    <GameStoreProvider game={game}>
       <GameHeader game={game} />
       {children}
-    </div>
+    </GameStoreProvider>
   );
 }

@@ -5,8 +5,8 @@ import { CheckoutInfoForm } from "@/components/checkout/CheckoutInfoForm";
 import { DiscountCodeForm } from "@/components/checkout/DiscountCodeForm";
 import { PaymentMethods } from "@/components/checkout/PaymentMethods";
 import { Button } from "@/components/ui/button";
-import { CheckoutStoreProvider } from "@/providers/checkoutStoreProvider";
-import { getEscape } from "@/repository/routes";
+import { CheckoutStoreProvider } from "@/providers/CheckoutStoreProvider";
+import { getEscape } from "@/repository/server";
 import { getTranslations } from "next-intl/server";
 
 export default async function CheckoutInfo() {
@@ -34,8 +34,8 @@ export default async function CheckoutInfo() {
             </p>
           </div>
           <div className="p-4">
-            <CheckoutInfoForm />
-            <DiscountCodeForm />
+            <CheckoutInfoForm escape={escape} />
+            <DiscountCodeForm escape={escape} />
             <PaymentMethods />
           </div>
         </div>

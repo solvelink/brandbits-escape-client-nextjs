@@ -5,8 +5,8 @@ import { CheckoutTicketForm } from "@/components/checkout/CheckoutTicketForm";
 import { PaymentMethods } from "@/components/checkout/PaymentMethods";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { CheckoutStoreProvider } from "@/providers/checkoutStoreProvider";
-import { getEscape } from "@/repository/routes";
+import { CheckoutStoreProvider } from "@/providers/CheckoutStoreProvider";
+import { getEscape } from "@/repository/server";
 import { getTranslations } from "next-intl/server";
 
 export default async function Home() {
@@ -18,7 +18,10 @@ export default async function Home() {
     <div>
       <CheckoutStoreProvider>
         <div className="pb-40">
-          <CheckoutHeader title={t("checkout.title")} />
+          <CheckoutHeader
+            title={t("checkout.title")}
+            backButtonHref={escapeContent.websiteUrl}
+          />
           <div
             className="bg-center bg-cover bg-no-repeat bg-gray-100 h-64"
             style={{

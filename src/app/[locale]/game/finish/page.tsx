@@ -2,7 +2,7 @@ import { Stats } from "@/components/game/Stats";
 import { RankingItem } from "@/components/RankingItem";
 import { BottomNavigation } from "@/components/ui/BottomNavigation";
 import { CircleButton } from "@/components/ui/CircleButton";
-import { getGame } from "@/repository/routes";
+import { getGame } from "@/repository/server";
 import { getTranslations } from "next-intl/server";
 import ArrowLeftIcon from "@/assets/icons/arrow-left.svg";
 import { Button } from "@/components/ui/button";

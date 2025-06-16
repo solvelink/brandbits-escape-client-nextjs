@@ -1,6 +1,6 @@
 "use client";
 
-import { useCheckoutStore } from "@/providers/checkoutStoreProvider";
+import { useCheckoutStore } from "@/providers/CheckoutStoreProvider";
 import { Field, Radio, RadioGroup, Transition } from "@headlessui/react";
 import CheckmarkIcon from "@/assets/icons/checkmark.svg";
 import { ProductType } from "@/types/enum";
