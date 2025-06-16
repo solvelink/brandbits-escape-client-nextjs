@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 
 export const getHostname = async () => {
   const headersList = await headers();
-  const host = headersList.get("host");
+  const host = headersList.get("x-forwarded-host");
   if (!host) {
     throw new Error("Host header not found");
   }
