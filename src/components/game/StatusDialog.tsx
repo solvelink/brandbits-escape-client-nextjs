@@ -5,9 +5,15 @@ import { Button } from "../ui/button";
 import { StatsItem } from "./Stats";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Game } from "@/types/game";
+import { GameProgress } from "@/types/game";
 
-export const StatusDialog = ({ game }: { game: Game }) => {
+export const StatusDialog = ({
+  imageUrl,
+  progress,
+}: {
+  imageUrl?: string;
+  progress: GameProgress;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const t = useTranslations();
 
@@ -15,7 +21,11 @@ export const StatusDialog = ({ game }: { game: Game }) => {
     setIsOpen(true);
   }, []);
 
-  // status_first / status_middle / status_last
+  const title = t(`pages.status_${progress.teamStatus}.title`, {
+    number: progress.teamPosition + 1,
+  });
+  const description = t(`pages.status_${progress.teamStatus}.description`);
+  const button = t(`pages.status_${progress.teamStatus}.button`);
 
   return (
     <Dialog
@@ -34,21 +44,50 @@ export const StatusDialog = ({ game }: { game: Game }) => {
             transition
             className="duration-300 w-lg ease-out data-closed:transform-[scale(95%)] data-closed:opacity-0 font-light bg-white rounded-md p-4"
           >
-            <div className="bg-gray-100 rounded-sm h-54" />
+            {imageUrl && (
+              <div
+                className="bg-gray-100 rounded-sm h-54 bg-cover bg-center"
+                style={{ backgroundImage: `url(${imageUrl})` }}
+              />
+            )}
             <div className="mt-4 text-center">
-              <h3 className="text-xl font-semibold">
-                {t("pages.status_first.title")}
-              </h3>
-              <p className="mt-2">{t("pages.status_first.description")}</p>
-              <div className="py-6">
-                <div className="grid grid-cols-2 gap-3">
-                  <StatsItem name="Punten" value={(200).toString()} />
-                  <StatsItem name="Laatse vraag" value={"Vraag 9"} />
+              <h3 className="text-xl font-semibold">{title}</h3>
+              <p className="mt-2">{description}</p>
+              <div className="py-6 flex flex-col gap-2">
+                {progress.games.map((item) => (
+                  <div key={item.id}>
+                    <p className="text-left font-medium mb-1">
+                      {t("common.team")} {item.teamName}:
+                    </p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <StatsItem
+                        name={t("common.points")}
+                        value={item.points}
+                      />
+                      <StatsItem
+                        name={t("pages.status.question_label")}
+                        value={
+                          item.answerCount
+                            ? t("pages.status.question", {
+                                number: item.answerCount,
+                              })
+                            : "-"
+                        }
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="border-t border-gray-75">
+                <div>
+                  <Button
+                    onClick={() => setIsOpen(false)}
+                    className="block w-full mt-6"
+                  >
+                    {button}
+                  </Button>
                 </div>
               </div>
-              <Button onClick={() => setIsOpen(false)} className="w-full">
-                {t("pages.status_first.button")}
-              </Button>
             </div>
           </DialogPanel>
         </div>

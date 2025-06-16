@@ -10,13 +10,13 @@ import { BottomNavigation } from "../ui/BottomNavigation";
 import { CircleButton } from "../ui/CircleButton";
 import ArrowLeftIcon from "@/assets/icons/arrow-left.svg";
 import { getTranslations } from "next-intl/server";
-import { Button } from "../ui/button";
 import { AudioPlayer } from "../defaultPage/AudioPlayer";
 import { HintButton } from "../defaultPage/HintButton";
 import { HintList } from "../defaultPage/HintList";
 import { QuestionType } from "@/types/enum";
 import { getPageAnswer } from "@/repository/server";
 import { NextButton } from "../defaultPage/NextButton";
+import { QuestionStoreProvider } from "@/providers/QuestionStoreProvider";
 
 export const DefaultPage = async ({
   page,
@@ -40,7 +40,7 @@ export const DefaultPage = async ({
   }
 
   return (
-    <div>
+    <QuestionStoreProvider>
       <DefaultPageHeader page={page} />
       <div
         className={clsx("px-4 py-6 flex flex-col gap-4 font-light", {
@@ -75,7 +75,9 @@ export const DefaultPage = async ({
         {page.questionType === "multiple_choice" && (
           <MultipleChoiceQuestion
             label={page.questionLabel}
+            answer={answer}
             answers={page.multipleChoiceAnswers}
+            pageId={page.pageId}
           />
         )}
         {page.textField3 && <Markdown>{page.textField3}</Markdown>}
@@ -90,6 +92,6 @@ export const DefaultPage = async ({
         {page.hints?.length > 0 && <HintButton hints={page.hints} />}
         <NextButton page={page} nextPage={nextPage} />
       </BottomNavigation>
-    </div>
+    </QuestionStoreProvider>
   );
 };

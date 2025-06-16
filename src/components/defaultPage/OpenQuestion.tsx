@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
-import { useQuestionStore } from "@/stores/questionStore";
 import { setPageAnswer } from "@/app/actions";
 import { useGameStore } from "@/stores/gameStore";
 import CheckmarkIcon from "@/assets/icons/checkmark.svg";
 import CrossIcon from "@/assets/icons/cross.svg";
+import { useQuestionStore } from "@/providers/QuestionStoreProvider";
 
 export const OpenQuestion = ({
   label,
@@ -24,7 +24,7 @@ export const OpenQuestion = ({
   pageId: number;
 }) => {
   const t = useTranslations();
-  const questionStore = useQuestionStore();
+  const questionStore = useQuestionStore((state) => state);
   const setPoints = useGameStore((s) => s.setPoints);
 
   const [text, setText] = useState(answer?.answer || "");
@@ -33,9 +33,7 @@ export const OpenQuestion = ({
   const isValidForm = text.trim() !== "" && !isLoading;
 
   useEffect(() => {
-    if (answer) {
-      questionStore.setIsCorrect(true);
-    }
+    questionStore.setIsCorrect(!!answer);
   }, [answer]);
 
   const submitAnswer = async (event: React.FormEvent<HTMLFormElement>) => {

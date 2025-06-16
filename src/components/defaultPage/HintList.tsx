@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuestionStore } from "@/stores/questionStore";
+import { useQuestionStore } from "@/providers/QuestionStoreProvider";
 import { GameDefaultPage } from "@/types/game";
 import { scrollIntoView } from "@/utils/scrollIntoView";
 import { useEffect, useRef } from "react";

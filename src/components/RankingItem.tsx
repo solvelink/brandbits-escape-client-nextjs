@@ -1,13 +1,16 @@
+"use client";
+
 import { clsx } from "clsx";
 import RankGoldIcon from "@/assets/icons/rank-gold.svg";
 import RankSilverIcon from "@/assets/icons/rank-silver.svg";
 import RankBronzeIcon from "@/assets/icons/rank-bronze.svg";
+import { useTranslations } from "next-intl";
 
 const RankIcon = ({
   number,
   className,
 }: {
-  number: number;
+  number: string | number;
   className?: string;
 }) => {
   if (number === 1) {
@@ -28,18 +31,23 @@ export const RankingItem = ({
   time,
   points,
   active,
+  className,
 }: {
-  number: number;
+  number: string | number;
   name: string;
   time: string;
-  points: number;
+  points: string | number;
   active?: boolean;
+  className?: string;
 }) => {
+  const t = useTranslations();
+
   return (
     <li
       className={clsx(
         "border rounded-md flex items-center p-2.5 gap-2 justify-between",
-        active ? "bg-green/10 border-green/20" : "bg-gray-50 border-gray-100"
+        active ? "bg-green/10 border-green/20" : "bg-gray-50 border-gray-100",
+        className
       )}
     >
       <div className="flex items-center">
@@ -59,7 +67,7 @@ export const RankingItem = ({
           <p
             className={clsx("text-sm", active ? "text-green" : "text-gray-200")}
           >
-            Tijd: {time}
+            {t("common.time")}: {time}
           </p>
         </div>
       </div>

@@ -6,9 +6,15 @@ import { useEffect, useState } from "react";
 import { BottomNavigation } from "../ui/BottomNavigation";
 import { CircleButton } from "../ui/CircleButton";
 import ArrowLeftIcon from "@/assets/icons/arrow-left.svg";
-import ShareIcon from "@/assets/icons/share.svg";
 import { Markdown } from "../Markdown";
 import { Button } from "../ui/button";
+import { generatePhoto } from "@/app/actions";
+import ShareIcon from "@/assets/icons/share.svg";
+import DownloadIcon from "@/assets/icons/download.svg";
+import FacebookIcon from "@/assets/icons/facebook.svg";
+import WhatsAppIcon from "@/assets/icons/whatsapp.svg";
+import { slugify } from "@/utils/slugify";
+import { useParams } from "next/navigation";
 
 export const PhotoPage = ({
   page,
@@ -27,8 +33,8 @@ export const PhotoPage = ({
     if (isLoading) return;
     setIsLoading(true);
     try {
-      // const res = await generatePhoto(gameStore.gameToken!, page.pageId, file);
-      // gameStore.setTeamImageUrl(res.data.teamImageUrl);
+      const res = await generatePhoto(page.pageId, file);
+      setTeamImageUrl(res.teamImageUrl);
     } catch (error) {
       console.error("Error uploading photo:", error);
     } finally {
@@ -65,12 +71,14 @@ export const PhotoPage = ({
   return (
     <div>
       <div className="bg-gray-100 bg-lines-gradient">
-        {/* <img src={teamImageUrl ? teamImageUrl : page.overlayImageUrl} /> */}
+        <img src={teamImageUrl ? teamImageUrl : page.overlayImageUrl} />
       </div>
       <div className="px-4 py-6">
         <h1 className="text-2xl font-bold">{title}</h1>
         <Markdown className="mt-4">{textField}</Markdown>
-        {teamImageUrl && <SharePhoto teamImageUrl={teamImageUrl} />}
+        {teamImageUrl && game.teamName && (
+          <SharePhoto teamName={game.teamName} gameId={game.id} />
+        )}
       </div>
       <BottomNavigation>
         {previousPage && (
@@ -92,7 +100,7 @@ export const PhotoPage = ({
               onClick={handlePhotoButton}
               className="flex-2"
             >
-              {t("pages.photo.button")}
+              {isLoading ? t("common.loading") : t("pages.photo.button")}
             </Button>
           </>
         )}
@@ -101,11 +109,26 @@ export const PhotoPage = ({
   );
 };
 
-export const SharePhoto = ({ teamImageUrl }: { teamImageUrl: string }) => {
+// [domain]/[locale]/share/[teamname]-[id]
+
+export const SharePhoto = ({
+  teamName,
+  gameId,
+}: {
+  teamName: string;
+  gameId: number;
+}) => {
   const t = useTranslations();
   const [shareSupported, setShareSupported] = useState(true);
+  const [link, setLink] = useState<string | null>(null);
+  const params = useParams();
 
   useEffect(() => {
+    setLink(
+      `${window.location.origin}/${params.locale}/share/${slugify(
+        teamName
+      )}-${gameId}`
+    );
     if (!navigator.share) {
       console.warn("Share API not supported in this browser.");
       setShareSupported(false);
@@ -113,26 +136,54 @@ export const SharePhoto = ({ teamImageUrl }: { teamImageUrl: string }) => {
   }, []);
 
   const handleShare = () => {
-    if (navigator.share) {
+    if (navigator.share && link) {
       navigator.share({
-        url: teamImageUrl,
+        url: link,
       });
     }
   };
 
-  if (shareSupported) {
-    return (
-      <div>
-        <p className="font-semibold mt-4">{t("pages.photo.share_label")}</p>
-        <div className="mt-2 flex gap-2">
-          <button
-            onClick={handleShare}
-            className="w-14 h-14 bg-green/10 text-green rounded-full flex items-center justify-center"
-          >
-            <ShareIcon className="fill-current" />
+  const handleDownload = async () => {
+    const a = document.createElement("a");
+    a.href = `/api/download/${gameId}`;
+    a.download = "";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
+
+  const buttonClassName =
+    "w-14 h-14 bg-green/10 text-green rounded-full flex items-center justify-center";
+
+  return (
+    <div>
+      <p className="font-semibold mt-4">{t("pages.photo.share_label")}</p>
+      <div className="mt-2 flex gap-3">
+        <a
+          href={`https://api.whatsapp.com/send?text=${link || ""}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={buttonClassName}
+        >
+          <WhatsAppIcon className="fill-current w-6" />
+        </a>
+        <a
+          href={`https://www.facebook.com/sharer.php?u=${link || ""}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={buttonClassName}
+        >
+          <FacebookIcon className="fill-current w-6" />
+        </a>
+        {shareSupported && (
+          <button className={buttonClassName} onClick={handleShare}>
+            <ShareIcon className="fill-current w-6" />
           </button>
-        </div>
+        )}
+        <button className={buttonClassName} onClick={handleDownload}>
+          <DownloadIcon className="fill-current w-6" />
+        </button>
       </div>
-    );
-  }
+    </div>
+  );
 };

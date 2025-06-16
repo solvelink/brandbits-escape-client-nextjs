@@ -175,3 +175,22 @@ export interface GameAnswerResponse {
   answer: string;
   answeredAt: string;
 }
+
+export interface GameProgress {
+  teamStatus: "first" | "middle" | "last";
+  teamPosition: number;
+  games: {
+    id: number;
+    teamName: string;
+    points: number;
+    answerCount: number;
+  }[];
+}
+
+export interface GameStats {
+  gameId: number;
+  teamName: string;
+  points: number;
+  totalTime: number | null;
+  quickestAnswerIndex: number | null;
+}

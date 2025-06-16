@@ -4,11 +4,13 @@ import { CircleButton } from "@/components/ui/CircleButton";
 import { getTranslations } from "next-intl/server";
 import ArrowLeftIcon from "@/assets/icons/arrow-left.svg";
 import { Button } from "@/components/ui/button";
-import { getGame } from "@/repository/server";
+import { getGame, getRankings } from "@/repository/server";
+import { formatTime } from "@/utils/formatTime";
 
 export default async function Ranking() {
   const t = await getTranslations();
   const game = await getGame();
+  const ranking = await getRankings();
 
   return (
     <div>
@@ -22,41 +24,23 @@ export default async function Ranking() {
           <p className="font-light text-gray-200">{t("common.points")}</p>
         </div>
         <ul className="flex flex-col gap-2">
-          <RankingItem
-            number={1}
-            name="Tom"
-            active={false}
-            time="02:53:15"
-            points={200}
-          />
-          <RankingItem
-            number={2}
-            name="Teun"
-            active={false}
-            time="02:53:15"
-            points={200}
-          />
-          <RankingItem
-            number={3}
-            name="BRANDBITS"
-            active={true}
-            time="02:53:15"
-            points={200}
-          />
-          <RankingItem
-            number={4}
-            name="De KluisKrakers"
-            active={false}
-            time="02:53:15"
-            points={200}
-          />
+          {ranking.map((item, index) => (
+            <RankingItem
+              key={item.id}
+              number={index + 1}
+              name={item.teamName}
+              active={game.id === item.id}
+              time={formatTime(item.totalTime)}
+              points={item.points}
+            />
+          ))}
         </ul>
       </div>
       <BottomNavigation>
         <CircleButton href="/game/finish" className="shrink-0">
           <ArrowLeftIcon className="w-5 fill-current" />
         </CircleButton>
-        <Button disabled className="flex-1">
+        <Button href="/game/feedback" className="flex-1">
           {t("common.next")}
         </Button>
       </BottomNavigation>

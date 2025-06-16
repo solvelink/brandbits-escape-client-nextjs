@@ -2,10 +2,10 @@
 
 import { GameDefaultPage } from "@/types/game";
 import { Button } from "../ui/button";
-import { useQuestionStore } from "@/stores/questionStore";
+import { useQuestionStore } from "@/providers/QuestionStoreProvider";
 
 export const HintButton = ({ hints }: { hints: GameDefaultPage["hints"] }) => {
-  const questionStore = useQuestionStore();
+  const questionStore = useQuestionStore((state) => state);
 
   const handleHints = () => {
     questionStore.setHintCount(questionStore.hintCount + 1);

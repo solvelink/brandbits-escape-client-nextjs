@@ -37,7 +37,7 @@ export default function InviteCode() {
 
   if (isError) {
     return (
-      <div className="flex flex-col items-center justify-center h-dvh text-center p-4">
+      <div className="flex flex-col items-center justify-center min-h-dvh text-center p-4">
         <h1 className="font-bold text-2xl">{t("invite_error.title")}</h1>
         <p className="rich-text mt-4">{t("invite_error.description")}</p>
         <Button className="mt-6" href="/">

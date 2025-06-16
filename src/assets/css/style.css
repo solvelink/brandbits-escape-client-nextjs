@@ -53,9 +53,13 @@
   }
 
   .radio-item {
-    @apply block font-normal w-full p-5 border-2 border-purple rounded-full text-center relative;
+    @apply block font-normal w-full p-5 border-2 border-purple rounded-full text-center relative transition-opacity duration-200;
+    &[data-disabled]&:not(.success, .error) {
+      @apply opacity-40 outline-0 border-0 bg-gray-100;
+    }
     &.error {
-      @apply text-red border-red outline-3 outline-red/40;
+      @apply text-red border-red outline-red/40 outline-3;
+      animation: radio-error 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) 0.5s both;
     }
     &.success,
     &[data-checked] {
@@ -88,6 +92,16 @@
       border-width: 16px;
       transform: rotate(-45deg);
     }
+  }
+}
+
+@keyframes radio-error {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    outline-width: 0;
+    opacity: 0.4;
   }
 }
 

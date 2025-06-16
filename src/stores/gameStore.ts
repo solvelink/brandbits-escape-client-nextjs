@@ -16,12 +16,12 @@ export const useGameStore = create<GameStore>((set) => ({
   setPoints: (points) => set({ points }),
 }));
 
-export const usePage = (game: Game) => {
+export const usePage = (game?: Game) => {
   const params = useParams();
   const step = parseInt(params.step as string, 10) || 1;
   const locale = params.locale as string;
 
-  const pageContent = game.pages.find((page) => page.order === step - 1);
+  const pageContent = game?.pages.find((page) => page.order === step - 1);
   if (!pageContent) return undefined;
 
   return {

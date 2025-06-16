@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
 import { GameDefaultPage } from "@/types/game";
 import { QuestionType } from "@/types/enum";
-import { useQuestionStore } from "@/stores/questionStore";
+import { useQuestionStore } from "@/providers/QuestionStoreProvider";
 
 export const NextButton = ({
   page,

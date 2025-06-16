@@ -26,7 +26,7 @@ export const DefaultPageHeader = ({ page }: { page: GameDefaultPage }) => {
         className={clsx("bg-gray-100 object-cover", heightClassName)}
       />
     );
-  // if (page.headerType === "map") return <Map className={heightClassName} />;
+  if (page.headerType === "map") return <Map className={heightClassName} />;
   if (page.headerType === "video") {
     return (
       <div className="bg-gray-100 overflow-hidden aspect-video w-full">

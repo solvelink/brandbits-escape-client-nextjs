@@ -2,8 +2,9 @@ import { DefaultPage } from "@/components/game/DefaultPage";
 import { PhotoPage } from "@/components/game/PhotoPage";
 import { StartPage } from "@/components/game/StartPage";
 import { StatusDialog } from "@/components/game/StatusDialog";
-import { getGame } from "@/repository/server";
+import { getGame, getGameProgress } from "@/repository/server";
 import { PageType } from "@/types/enum";
+import { GameProgress } from "@/types/game";
 import { notFound } from "next/navigation";
 
 export default async function GameStep({
@@ -21,7 +22,7 @@ export default async function GameStep({
   }
 
   const totalPages = game.pages.length || 0;
-  const isCenterPage =
+  const isMiddlePage =
     totalPages > 0 && currentPage.order === Math.floor(totalPages / 2);
 
   const PageContent = () => {
@@ -36,10 +37,20 @@ export default async function GameStep({
     }
   };
 
+  let gameProgress: GameProgress | undefined;
+  if (isMiddlePage) {
+    gameProgress = await getGameProgress();
+  }
+
   return (
     <>
       <PageContent />
-      {isCenterPage && <StatusDialog game={game} />}
+      {gameProgress && gameProgress.games.length > 1 && (
+        <StatusDialog
+          imageUrl={game.escape.escapeContent.progressImageUrl}
+          progress={gameProgress}
+        />
+      )}
     </>
   );
 }

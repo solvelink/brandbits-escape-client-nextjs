@@ -1,4 +1,7 @@
+"use client";
+
 import clsx from "clsx";
+import { useTranslations } from "next-intl";
 
 export const StatsItem = ({
   name,
@@ -6,7 +9,7 @@ export const StatsItem = ({
   active,
 }: {
   name: string;
-  value: string;
+  value: string | number;
   active?: boolean;
 }) => {
   return (
@@ -37,12 +40,14 @@ export const Stats = ({
   distance: string;
   active?: boolean;
 }) => {
+  const t = useTranslations();
+
   return (
     <div className="grid grid-cols-2 gap-3">
-      <StatsItem name="Punten" value={points.toString()} active={active} />
-      <StatsItem name="Tijd" value={time} active={active} />
-      <StatsItem name="Snelst" value={quickest} active={active} />
-      <StatsItem name="Afstand" value={distance} active={active} />
+      <StatsItem name={t("common.points")} value={points} active={active} />
+      <StatsItem name={t("common.time")} value={time} active={active} />
+      <StatsItem name={t("common.quickest")} value={quickest} active={active} />
+      <StatsItem name={t("common.distance")} value={distance} active={active} />
     </div>
   );
 };

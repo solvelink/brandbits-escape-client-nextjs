@@ -86,6 +86,10 @@
       "button": "Maak een foto",
       "share_label": "Jou foto delen of opslaan via"
     },
+    "status": {
+      "question_label": "Laatste vraag",
+      "question": "Vraag {number}"
+    },
     "status_first": {
       "title": "Jullie staan bovenaan!",
       "description": "Het andere team weet nu dat jullie op kop liggen. Blijf scherp en houd die voorsprong vast!",
@@ -106,7 +110,8 @@
     "title": "Gefeliciteerd!",
     "description": "Voluptate dolor ex tempor eu excepteur aute. Nisi commodo quis irure sunt ex veniam Lorem tempor enim. Veniam id eu duis. Sit ex ea incididunt velit",
     "results": "Resultaten:",
-    "results_team": "Resultaten team {name}:"
+    "results_team": "Resultaten team {name}:",
+    "unkown_time": "Nog niet bekend"
   },
   "ranking": {
     "title": "Raking",
@@ -124,5 +129,9 @@
     "title": "Ongeldige uitnodigings link",
     "description": "De link die je hebt gebruikt is ongeldig of verlopen. Controleer de link en probeer het opnieuw.",
     "button": "Naar aankooppagina"
+  },
+  "share": {
+    "title": "Download deze afbeelding",
+    "download": "Download"
   }
 }

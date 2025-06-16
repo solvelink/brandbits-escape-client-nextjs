@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import mapboxgl, { MapOptions } from "mapbox-gl";
 import { GameDefaultPage } from "@/types/game";
 import { useGameStore, usePage } from "@/stores/gameStore";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 const trimLineString = (
   lineString: GeoJSON.LineString,
@@ -18,7 +19,7 @@ const trimLineString = (
 
 export const Map = ({ className }: { className?: string }) => {
   const game = useGameStore((state) => state.game);
-  const page = usePage(game!);
+  const page = usePage(game);
 
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -177,7 +178,7 @@ export const Map = ({ className }: { className?: string }) => {
     return () => {
       mapRef.current!.remove();
     };
-  }, []);
+  }, [game]);
 
   return <div id="map-container" className={className} ref={mapContainerRef} />;
 };
